@@ -15,7 +15,7 @@ import sn.pressingsicap.Demo.Service.ClientService;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/clients",produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/clients")
 @Slf4j
 public class ClientController {
     @Autowired
@@ -32,13 +32,9 @@ public class ClientController {
 
         return "redirect:/clients/liste";
     }
-//    @GetMapping("/enregistrer")
-//    public ResponseEntity<List<Client>> listerClients() {
-//        return ResponseEntity.ok(clientService.listerTousLesClients());
-//    }
 
     @GetMapping(value = "/liste")
-    @PreAuthorize("hasAnyRole('ADMIN','GERANT')")
+    @PreAuthorize("hasRole(ROLE_GERANT)")
     public String getClientListe(Model model) {
         model.addAttribute("clients", clientService.listerTousLesClients());//Pour la liste
         model.addAttribute("client", new Client());//Pour le formulaire
@@ -48,7 +44,7 @@ public class ClientController {
     }
 
     @GetMapping("/recherche")
-//    @PreAuthorize("hasAnyRole('ADMIN','GERANT')")
+    @PreAuthorize("hasRole(ROLE_GERANT)")
     public ResponseEntity<Client> chercherParTelephone(@RequestParam String telephone) {
         return ResponseEntity.ok(clientService.chercherParTelephone(telephone));
     }
@@ -56,7 +52,6 @@ public class ClientController {
 
 
     @PutMapping("/{id}")
-//    @PreAuthorize("hasAnyRole('ADMIN','GERANT')")
     public ResponseEntity<Client> modifierClient(@PathVariable Long id, @RequestBody Client clientDetails) {
         return ResponseEntity.ok(clientService.modifierClient(id, clientDetails));
     }
