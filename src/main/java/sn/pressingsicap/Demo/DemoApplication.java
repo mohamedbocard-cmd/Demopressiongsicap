@@ -7,7 +7,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.persistence.autoconfigure.EntityScan;
-import org.springframework.boot.security.autoconfigure.SecurityAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -48,8 +47,7 @@ public class DemoApplication {
 					.telephone("7854871454")
 					.email("dgn@gmail.com")
 					.build();
-
-			Utilisateur ut = Utilisateur.builder()
+            Utilisateur ut = Utilisateur.builder()
 					.nom("Saw")
 					.prenom("ba ka")
 					.username("Saw@gmail.com")

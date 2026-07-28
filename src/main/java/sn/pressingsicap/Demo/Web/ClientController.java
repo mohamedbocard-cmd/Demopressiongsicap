@@ -2,12 +2,10 @@ package sn.pressingsicap.Demo.Web;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 import sn.pressingsicap.Demo.Models.Client;
 import sn.pressingsicap.Demo.Service.ClientService;
@@ -34,7 +32,7 @@ public class ClientController {
     }
 
     @GetMapping(value = "/liste")
-    @PreAuthorize("hasRole(ROLE_GERANT)")
+    @PreAuthorize("hasRole('GERANT')")
     public String getClientListe(Model model) {
         model.addAttribute("clients", clientService.listerTousLesClients());//Pour la liste
         model.addAttribute("client", new Client());//Pour le formulaire
@@ -44,7 +42,7 @@ public class ClientController {
     }
 
     @GetMapping("/recherche")
-    @PreAuthorize("hasRole(ROLE_GERANT)")
+    @PreAuthorize("hasRole('GERANT')")
     public ResponseEntity<Client> chercherParTelephone(@RequestParam String telephone) {
         return ResponseEntity.ok(clientService.chercherParTelephone(telephone));
     }

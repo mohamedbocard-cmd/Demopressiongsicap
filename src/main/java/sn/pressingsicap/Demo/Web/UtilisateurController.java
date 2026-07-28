@@ -30,7 +30,7 @@ public class UtilisateurController {
     Lise des Users dans la base
     **/
     @GetMapping
-    @PreAuthorize("hasRole(ROLE_ADMIN)")
+    @PreAuthorize("hasRole('ADMIN')")
     public List<Utilisateur> listUtilisateur() {
         log.info("listUtilisateur{} in the database", utilisateurService.listUtilisateur());
         return utilisateurService.listUtilisateur();
@@ -38,7 +38,7 @@ public class UtilisateurController {
     }
 
     @GetMapping("/ajouter")
-    @PreAuthorize("hasRole(ROLE_ADMIN)")
+    @PreAuthorize("hasRole('ADMIN')")
     public String ajouterUtilisateur(Model model) {
         model.addAttribute("utilisateur", new Utilisateur());
         return "admin/form-utilisateur";
@@ -47,7 +47,7 @@ public class UtilisateurController {
      * Ajout du Users
      * */
     @PostMapping("/save")
-    @PreAuthorize("hasRole(ROLE_ADMIN)")
+    @PreAuthorize("hasRole('ADMIN')")
     public String addNewUtilisateure(@ModelAttribute Utilisateur utilisateur) {
 
         utilisateurService.saveNewUtilisateur(utilisateur);
@@ -58,7 +58,7 @@ public class UtilisateurController {
      * Recuperation du Users via son identifiant (id)
      * */
     @GetMapping("/edit/{id}")
-    @PreAuthorize("hasRole(ROLE_ADMIN)")
+    @PreAuthorize("hasRole('ADMIN')")
     public String modifierUtilisateur(@PathVariable Long id, Model model) {
 
         Utilisateur utilisateur = utilisateurService
@@ -76,7 +76,7 @@ public class UtilisateurController {
 
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole(ROLE_ADMIN)")
+    @PreAuthorize("hasRole('ADMIN')")
     public void deleteUtilisateurById(@PathVariable Long id) {
         log.info("deleteUtilisateur {} ",id);
         utilisateurService.deleteUtilisateurById(id);
