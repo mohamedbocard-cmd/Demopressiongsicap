@@ -27,6 +27,7 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     }
 
 
+
     @Override
     public void saveNewUtilisateur(Utilisateur utilisateur) { /* CRYPTAGE DE MDP USERS*/
         utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));

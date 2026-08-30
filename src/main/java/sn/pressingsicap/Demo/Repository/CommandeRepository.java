@@ -11,7 +11,6 @@ import sn.pressingsicap.Demo.Models.StatutCommande;
 import java.util.Optional;
 
 @Repository
-@EnableJpaRepositories
 public interface CommandeRepository extends JpaRepository<Commande, Long> {
 
 

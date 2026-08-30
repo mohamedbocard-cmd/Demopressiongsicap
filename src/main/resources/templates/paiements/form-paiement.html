@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr"  xmlns:th="http://www.thymeleaf.org"
+       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+       layout:decorate=~{dashboard/accueil}>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Enregistrer un paiement</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+
+<body class="bg-light">
+<div layout:fragment="content" class="container">
+
+<div class="container mt-5">
+
+    <div class="card shadow">
+
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Enregistrer un paiement</h4>
+        </div>
+
+        <div class="card-body">
+
+            <form th:action="@{/paiements/ajouter}"
+                  th:object="${paiement}"
+                  method="post">
+
+                <!-- Commande -->
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Commande
+                    </label>
+
+                    <select class="form-select"
+                            th:field="*{commande}">
+
+                        <option value="">
+                            --Sélectionner une commande--
+                        </option>
+
+                        <option th:each="commande : ${commandes}"
+                                th:value="${commande.id}"
+                                th:text="'Commande N°' + ${commande.numero_cmd} + ' - ' + ${commande.client.nom}">
+                        </option>
+
+                    </select>
+
+                </div>
+                <!-- Client -->
+                <div class="mb-3">
+                    <label for="client" class="form-label">
+                        Client
+                    </label>
+
+                    <select id="client"
+                            th:field="*{client}"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            -- Sélectionner un Client --
+                        </option>
+
+                        <option th:each="client : ${clients}"
+                                th:value="${client.id}"
+                                th:text="${client.prenom + ' ' + client.nom}">
+                        </option>
+
+                    </select>
+                </div>
+                <!-- Client -->
+
+                <!-- Statut -->
+                <div class="mb-3">
+                    <label class="form-label">Statut</label>
+                    <label>
+                        <select class="form-select"
+                                th:field="*{statut}">
+                            <option value="">Choisir un statut</option>
+                            <option value="NON_PAYE">NON_PAYE</option>
+                            <option value="AVANCE">AVANCE</option>
+                            <option value="PAYE">PAYE</option>
+                        </select>
+                    </label>
+                </div>
+
+
+                <!-- Montant -->
+                <div class="mb-3">
+                    <label for="montantTotal" class="form-label">
+                        Montant Total
+                    </label>
+
+                    <input type="number"
+                           id="montantTotal"
+                           th:field="*{montantTotal}"
+                           class="form-control"
+                           step="0.01"
+                           min="0"
+                           placeholder="Ex : saisie le montant"
+                           required>
+                </div>
+
+                <!-- montantAvance -->
+                <div class="mb-3">
+                    <label for="montantAvance" class="form-label">
+                        Montant Avance
+                    </label>
+
+                    <input type="number"
+                           id="montantAvance"
+                           th:field="*{montantAvance}"
+                           class="form-control"
+                           step="0.01"
+                           min="0"
+                           placeholder="Ex : saisie le montant avance"
+                           required>
+                </div>
+              <!-- Mode de paiement -->
+                <div class="mb-3">
+                    <label for="modePaiement" class="form-label">
+                        Mode de paiement
+                    </label>
+
+                    <select id="modePaiement"
+                            th:field="*{modePaiement}"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            -- Choisir un mode --
+                        </option>
+
+                        <option value="ESPECES">Espèces</option>
+                        <option value="WAVE">Wave</option>
+                        <option value="ORANGE_MONEY">Orange Money</option>
+                        <option value="CHEQUE">Chèque</option>
+
+                    </select>
+                </div>
+
+                <!-- datePaiement -->
+                <div class="mb-3">
+                    <label for="datePaiement" class="form-label">
+                        Date du paiement
+                    </label>
+
+                    <input type="datetime-local"
+                           id="datePaiement"
+                           th:field="*{datePaiement}"
+                           class="form-control">
+                </div>
+
+                <div class="d-flex gap-2">
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Enregistrer
+                    </button>
+
+                    <a th:href="@{/paiements/liste}"
+                       class="btn btn-secondary">
+                        Annuler
+                    </a>
+
+                </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+</div>
+</body>
+</html>
+

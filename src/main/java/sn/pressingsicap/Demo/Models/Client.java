@@ -10,7 +10,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-@ToString
+//@ToString
 public class Client {
 
     @Id
@@ -26,10 +26,13 @@ public class Client {
     @Column(unique = true)
     private String telephone;
 
-    @NotBlank(message = "Le email est obligatoire")
-    private String email;
+    @NotBlank(message = "Le username est obligatoire")
+    private String username;
 
-    @ToString.Include
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
-    private List<Commande> commandes;
+    private List<Commande> commande;
+
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    private List<Paiement> paiement;
 }

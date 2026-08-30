@@ -1,16 +1,15 @@
 package sn.pressingsicap.Demo.Web;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import sn.pressingsicap.Demo.Exception.UtilisateurNotFoundException;
 import sn.pressingsicap.Demo.Models.Utilisateur;
 import sn.pressingsicap.Demo.Service.UtilisateurService;
 
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 @Slf4j
@@ -18,7 +17,6 @@ import java.util.Optional;
 
 public class UtilisateurController {
 
-    @Autowired
     private  final UtilisateurService utilisateurService;
 
     public UtilisateurController(UtilisateurService utilisateurService) {
@@ -29,18 +27,20 @@ public class UtilisateurController {
     /*
     Lise des Users dans la base
     **/
-    @GetMapping
+    @GetMapping("/liste")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<Utilisateur> listUtilisateur() {
-        log.info("listUtilisateur{} in the database", utilisateurService.listUtilisateur());
-        return utilisateurService.listUtilisateur();
-
+    public String getUtilisateur (Model model) {
+        model.addAttribute("utilisateurs", utilisateurService.listUtilisateur());//Pour la liste
+        model.addAttribute("utilisateur", new Utilisateur());//Pour le formulaire
+        return "admin/liste";
     }
+
 
     @GetMapping("/ajouter")
     @PreAuthorize("hasRole('ADMIN')")
     public String ajouterUtilisateur(Model model) {
         model.addAttribute("utilisateur", new Utilisateur());
+
         return "admin/form-utilisateur";
     }
     /**
@@ -48,14 +48,28 @@ public class UtilisateurController {
      * */
     @PostMapping("/save")
     @PreAuthorize("hasRole('ADMIN')")
-    public String addNewUtilisateure(@ModelAttribute Utilisateur utilisateur) {
+    public String addNewUtilisateure(@ModelAttribute Utilisateur utilisateur, RedirectAttributes redirectAttributes) {
+        try {
+            utilisateurService.saveNewUtilisateur(utilisateur);
 
-        utilisateurService.saveNewUtilisateur(utilisateur);
+            redirectAttributes.addFlashAttribute(
+                    "success",
+                    "Utilisateur enregistré avec succès !"
+            );
 
-        return "redirect:/admin/utilisateurs";
+        } catch (Exception e) {
+
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "Erreur lors de l'enregistrement du utilisateur."
+            );
+        }
+        return "redirect:/admin/liste";
+
+
     }
     /**
-     * Recuperation du Users via son identifiant (id)
+     * Modification du Users via son identifiant (id)
      * */
     @GetMapping("/edit/{id}")
     @PreAuthorize("hasRole('ADMIN')")
@@ -63,11 +77,13 @@ public class UtilisateurController {
 
         Utilisateur utilisateur = utilisateurService
                 .getUtilisateurById(id)
-                .orElseThrow(() -> new RuntimeException("Utilisateur introuvable"));
+                .orElseThrow(() -> new UtilisateurNotFoundException("Utilisateur introuvable"));
 
         model.addAttribute("utilisateur", utilisateur);
+        model.addAttribute("utilisateurs", utilisateurService.listUtilisateur());
 
         return "admin/form-utilisateur";
+
     }
 
     /**
@@ -75,10 +91,24 @@ public class UtilisateurController {
      * */
 
 
-    @DeleteMapping("/{id}")
+    @GetMapping("/delete/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public void deleteUtilisateurById(@PathVariable Long id) {
-        log.info("deleteUtilisateur {} ",id);
-        utilisateurService.deleteUtilisateurById(id);
+    public String deleteUtilisateur(@PathVariable Long id, RedirectAttributes redirectAttributes){
+        try {
+            utilisateurService.deleteUtilisateurById(id);
+
+            redirectAttributes.addFlashAttribute(
+                    "success",
+                    "Utilisateur supprimé avec succès !"
+            );
+
+        } catch (Exception e) {
+
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    "Impossible de supprimer le utilisateur."
+            );
+        }
+        return "redirect:/admin/liste";
     }
 }

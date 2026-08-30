@@ -2,6 +2,7 @@ package sn.pressingsicap.Demo.Models;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,6 +22,7 @@ public class Paiement {
 
     private BigDecimal montantTotal;
     private BigDecimal montantAvance; // Si le client paie une partie au dépôt
+    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime datePaiement;
 
     private String modePaiement; // CASH, CARTE, MOBILE_MONEY
@@ -28,7 +30,11 @@ public class Paiement {
     @Enumerated(EnumType.STRING)
     private StatutPaiement statut; // NON_PAYE, AVANCE, PAYE
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "commande_id", nullable = false)
     private Commande commande;
+
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Client client;
 }

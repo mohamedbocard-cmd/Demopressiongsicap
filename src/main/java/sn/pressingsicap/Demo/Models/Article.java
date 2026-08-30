@@ -4,14 +4,13 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-
-@Entity
-@Data
+//@Data
 @Getter
 @Setter
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+//@ToString
 @Builder
 public class Article {
 
@@ -22,7 +21,7 @@ public class Article {
     private String nom; // ex: Costume 3 pièces, Robe de soirée, Couette , chemise,pentallon
     private String couleur;
     private String marque;
-    private String descriptionDéfauts; // Pour noter une tache ou une déchirure existante avant lavage
+    private String descriptionDefauts; // Pour noter une tache ou une déchirure existante avant lavage
 
     private BigDecimal prixLavage;
 
@@ -32,4 +31,8 @@ public class Article {
     @ManyToOne
     @JoinColumn(name = "commande_id", nullable = false)
     private Commande commande;
+
+    @ManyToOne
+    @JoinColumn(name = "categorie_id")
+    private Categorie categorie;
 }

@@ -1,7 +1,7 @@
 package sn.pressingsicap.Demo.Security;
+
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -20,10 +20,13 @@ import sn.pressingsicap.Demo.Service.CustomUserDetailsService;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
-@RequiredArgsConstructor
 public class SecurityConfiguration {
 
     private final CustomUserDetailsService userDetailsService;
+
+    public SecurityConfiguration(CustomUserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
 
 
     @Bean
@@ -33,37 +36,79 @@ public class SecurityConfiguration {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authenticationProvider(authenticationProvider(userDetailsService))
                 .authorizeHttpRequests(auth -> auth
-
                         .requestMatchers(
                                 "/login",
-                                "/register",
-                                "/error",
-                                "/public/**",
                                 "/css/**",
                                 "/js/**",
                                 "/images/**",
                                 "/fonts/**",
-                                "/logout"
+                                "/logout",
+                                "/vendor/**",
+                                "/static/**",
+                                "/public/**",
+                                "/favicon.ico"
                         ).permitAll()
 
-                        .requestMatchers(HttpMethod.POST, "/clients/enregistrer").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/commandes/liste").permitAll()
 
-                        .requestMatchers(HttpMethod.GET, "/clients/liste").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/admin/liste").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/clients/liste").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/articles/liste").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/paiements/liste").permitAll()
+
+                        .requestMatchers(HttpMethod.POST, "/categories/liste").permitAll()
+
+
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-
-                        .requestMatchers("/clients/**").hasRole("GERANT")
+                        .requestMatchers("/dashboard/**").hasAnyRole("ADMIN","GERANT","EMPLOYER")
 
                         .requestMatchers("/employe/**").hasRole("EMPLOYER")
 
+
+                        .requestMatchers("/utilisateur/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/paiements/**").hasAnyRole("ADMIN", "GERANT")
+
+                        .requestMatchers("/commandes/**").hasAnyRole("ADMIN", "GERANT")
+
+                        .requestMatchers("/categories/**").hasAnyRole("ADMIN", "GERANT")
+
+
+
+                        .requestMatchers("/clients/ajouter/**").hasAnyRole("GERANT", "ADMIN")
+                        .requestMatchers("/clients/liste/**").hasAnyRole("GERANT", "ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/clients/delete/**")
+                        .hasAnyRole("GERANT", "ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/articles/delete/**")
+                        .hasAnyRole("GERANT", "ADMIN")
+
+                        .requestMatchers(HttpMethod.POST, "/paiements/liste").hasAnyRole("ADMIN", "GERANT")
+
+                        .requestMatchers("/commandes/save/**").hasAnyRole("GERANT", "ADMIN")
+//                        .requestMatchers("/commandes/ajouter/**").hasAnyRole("GERANT", "ADMIN")
+
+                        .requestMatchers("/commandes/liste/**").hasAnyRole("GERANT", "ADMIN")
+
+
                         .anyRequest().authenticated()
                 )
-
                 .formLogin(form -> form
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/clients/liste", true)
+                        .loginPage("/login") //form ->Personnalisation
+                        .loginProcessingUrl("/login")
+                        .defaultSuccessUrl("/dashboard", true)
                         .permitAll()
-                )   ;
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout=true")
+                        .invalidateHttpSession(true)
+                        .deleteCookies("JSESSIONID")
+                        .permitAll());
 
         return http.build();
     }

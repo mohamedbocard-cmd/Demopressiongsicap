@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import sn.pressingsicap.Demo.Exception.ClientNotFoundException;
 import sn.pressingsicap.Demo.Models.Client;
 import sn.pressingsicap.Demo.Repository.ClientRepository;
 
@@ -20,7 +21,7 @@ public class ClientService {
     public Client enregistrerClient(@RequestBody Client client) {
         // Vérifie si le numéro de téléphone est déjà utilisé en base
         if (clientRepository.findByTelephone(client.getTelephone()).isPresent()) {
-            throw new RuntimeException("Un client existe déjà avec ce numéro de téléphone dans la BDD.");
+            throw new ClientNotFoundException("Un client existe déjà avec ce numéro de téléphone dans la BDD.");
         }
         return clientRepository.save(client);
     }
@@ -31,18 +32,19 @@ public class ClientService {
 
     public Client chercherParTelephone(String telephone) {
         return clientRepository.findByTelephone(telephone)
-                .orElseThrow(() -> new RuntimeException("Client introuvable avec le téléphone : " + telephone));
+                .orElseThrow(() -> new ClientNotFoundException("Client introuvable avec le téléphone : " + telephone));
     }
 
-    public Client modifierClient(Long id, Client clientDetails) {
+    public Client modifierClient(Long id) {
         Client client = clientRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Client non trouvé"));
-
-        client.setNom(clientDetails.getNom());
-        client.setPrenom(clientDetails.getPrenom());
-        client.setTelephone(clientDetails.getTelephone());
-        client.setEmail(clientDetails.getEmail());
+                .orElseThrow(() -> new ClientNotFoundException("Client non trouvé"));
 
         return clientRepository.saveAndFlush(client);
     }
+
+    public void deleteClient(Long id) {
+        clientRepository.deleteById(id);
+    }
+
+
 }
