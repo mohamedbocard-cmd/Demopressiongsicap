@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.apache.logging.log4j.core.config.plugins.validation.constraints.NotBlank;
 
+import java.util.ArrayList;
 import java.util.List;
 @Getter @Setter
 @Entity
@@ -35,4 +36,16 @@ public class Client {
 
     @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
     private List<Paiement> paiement;
+
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    private List<DetailCommande> details = new ArrayList<>();
+
+    @OneToMany(mappedBy = "client", cascade = CascadeType.ALL)
+    private List<Facture> factures;
+
+
+
+
+
 }

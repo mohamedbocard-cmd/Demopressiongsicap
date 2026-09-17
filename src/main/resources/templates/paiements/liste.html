@@ -112,11 +112,10 @@
                     <thead class="table-dark">
                     <tr>
                         <th>ID</th>
-                        <th>Montant total</th>
-                        <th>Montant avance</th>
-                        <th>Date paiement</th>
-                        <th>Commande</th>
-<!--                        <th>Numero Commande</th>-->
+                        <th>Montant Total</th>
+                        <th>Montant Avance</th>
+                        <th>Date Paiement</th>
+                        <th>Numero Commande</th>
                         <th>Client</th>
                         <th>Mode paiement</th>
                         <th>Statut</th>
@@ -127,7 +126,7 @@
 
                     <tbody>
 
-                    <tr th:each="paiement : ${paiement}">
+                    <tr th:each="paiement : ${paiements}">
 
                         <!-- ID -->
                         <td th:text="${paiement.id}"></td>
@@ -151,9 +150,9 @@
 
                         <!-- Commande -->
                         <td>
-                        <span th:if="${paiement.commande != null}"
-                              th:text="'Commande #' + ${paiement.commande.numero_cmd}">
-                        </span>
+                           <span th:if="${paiement.commande != null}"
+                                  th:text="|${paiement.commande.id} - ${paiement.commande.numero_cmd}|">
+                         </span>
 
                             <span th:if="${paiement.commande == null}"
                                   class="text-muted">
@@ -169,7 +168,7 @@
                             </span>
 
                             <span th:if="${paiement.commande == null
-                      or paiement.commande.client == null}"
+                             or paiement.commande.client == null}"
                                   class="text-muted">
                                  Aucun client
                             </span>

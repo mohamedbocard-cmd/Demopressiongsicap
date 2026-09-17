@@ -18,11 +18,11 @@ public class Utilisateur {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "nom")
-    private String nom;
+    @Column(name = "lastname")
+    private String lastname;
 
-    @Column(name = "prenom")
-    private String prenom;
+    @Column(name = "firstname")
+    private String firstname;
 
     @Column(name = "username")
     private String username;

@@ -19,7 +19,7 @@ import sn.pressingsicap.Demo.Service.CustomUserDetailsService;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity /// pour securiser ton app avc  il faut activer @preauthorise.
 public class SecurityConfiguration {
 
     private final CustomUserDetailsService userDetailsService;
@@ -38,14 +38,16 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/login",
-                                "/css/**",
-                                "/js/**",
+                                "/static/css/**",
+                                "/static/js/**",
                                 "/images/**",
-                                "/fonts/**",
+                                "/static/fonts/**",
                                 "/logout",
-                                "/vendor/**",
-                                "/static/**",
+                                "/static/vendor/**",
+                                "/login/**",
+                                "/inscription/**",
                                 "/public/**",
+                                "/static/scss/**",
                                 "/favicon.ico"
                         ).permitAll()
 
@@ -60,16 +62,16 @@ public class SecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/paiements/liste").permitAll()
 
                         .requestMatchers(HttpMethod.POST, "/categories/liste").permitAll()
-
+                        .requestMatchers(HttpMethod.POST, "/factures/liste").permitAll()
 
 
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/dashboard/**").hasAnyRole("ADMIN","GERANT","EMPLOYER")
 
-                        .requestMatchers("/employe/**").hasRole("EMPLOYER")
+                        .requestMatchers("/employe/**").hasAnyRole("EMPLOYER")
 
 
-                        .requestMatchers("/utilisateur/**").hasAnyRole("ADMIN")
+                        .requestMatchers("/utilisateur/**").hasRole("ADMIN")
                         .requestMatchers("/paiements/**").hasAnyRole("ADMIN", "GERANT")
 
                         .requestMatchers("/commandes/**").hasAnyRole("ADMIN", "GERANT")
@@ -81,22 +83,32 @@ public class SecurityConfiguration {
                         .requestMatchers("/clients/ajouter/**").hasAnyRole("GERANT", "ADMIN")
                         .requestMatchers("/clients/liste/**").hasAnyRole("GERANT", "ADMIN")
 
+
                         .requestMatchers(HttpMethod.POST, "/clients/delete/**")
                         .hasAnyRole("GERANT", "ADMIN")
 
                         .requestMatchers(HttpMethod.POST, "/articles/delete/**")
-                        .hasAnyRole("GERANT", "ADMIN")
+                        .hasAnyRole("GERANT", "ADMIN","EMPLOYER")
 
                         .requestMatchers(HttpMethod.POST, "/paiements/liste").hasAnyRole("ADMIN", "GERANT")
 
-                        .requestMatchers("/commandes/save/**").hasAnyRole("GERANT", "ADMIN")
-//                        .requestMatchers("/commandes/ajouter/**").hasAnyRole("GERANT", "ADMIN")
+                         .requestMatchers("/commandes/save/**").hasAnyRole("GERANT", "ADMIN")
 
                         .requestMatchers("/commandes/liste/**").hasAnyRole("GERANT", "ADMIN")
 
+                        .requestMatchers(HttpMethod.POST,"/articles/liste/**").hasAnyRole("EMPLOYER","ADMIN", "GERANT")
+                        .requestMatchers(HttpMethod.POST,"/factures/liste/**").hasAnyRole("ADMIN", "GERANT")
 
+                        .requestMatchers(HttpMethod.POST,"/factures/ajouter/**").hasAnyRole("GERANT", "ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/factures/save/**").hasAnyRole("GERANT", "ADMIN")
+
+
+                        .requestMatchers(HttpMethod.POST,"/inscription/**").permitAll()
                         .anyRequest().authenticated()
+
                 )
+                .exceptionHandling(e->e.accessDeniedPage("/accessDenied"))
+
                 .formLogin(form -> form
                         .loginPage("/login") //form ->Personnalisation
                         .loginProcessingUrl("/login")
@@ -105,7 +117,7 @@ public class SecurityConfiguration {
                 )
                 .logout(logout -> logout
                         .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout=true")
+                        .logoutSuccessUrl("/login")
                         .invalidateHttpSession(true)
                         .deleteCookies("JSESSIONID")
                         .permitAll());
@@ -136,6 +148,7 @@ public class SecurityConfiguration {
         return authenticationManagerBuilder.build();
 
     }
+
 
 
 }

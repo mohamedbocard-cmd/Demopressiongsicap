@@ -3,28 +3,56 @@ package sn.pressingsicap.Demo.Web;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import sn.pressingsicap.Demo.Dto.InscriptionDTO;
 import sn.pressingsicap.Demo.Models.Utilisateur;
 import sn.pressingsicap.Demo.Repository.UtilisateurRepository;
+import sn.pressingsicap.Demo.Service.UtilisateurService;
 
-@RestController
-//@RequestMapping("/api")
+@Controller
 @RequiredArgsConstructor
 public class RegistrationController {
-
+    private  final UtilisateurService utilisateurService;
     private final UtilisateurRepository utilisateurRepository;
     private final PasswordEncoder passwordEncoder;
 
-    @PostMapping("/register") // cette methode permettra de verifier si user est !=null ou present dans BD
-    public ResponseEntity<?> registerUser(@RequestBody Utilisateur utilisateur) {
-        if (utilisateurRepository.findByUsername(utilisateur.getUsername()).isPresent()){
+    @GetMapping("/inscription")
+    public String afficherInscription(Model model) {
 
-            return ResponseEntity.badRequest().body("Username already exist");
-        }
-        utilisateur.setPassword(passwordEncoder.encode(utilisateur.getPassword()));
-        return ResponseEntity.ok(utilisateurRepository.save(utilisateur));
+        model.addAttribute("inscription", new InscriptionDTO());
 
+        return "inscription";
     }
 
 
-}
+    @PostMapping("/inscription")
+    public String inscrire(
+            @ModelAttribute("inscription") InscriptionDTO dto,
+            RedirectAttributes redirectAttributes) {
+
+        try {
+
+            utilisateurService.inscrire(dto);
+
+            redirectAttributes.addFlashAttribute(
+                    "success",
+                    "Inscription réussie ! Vous pouvez maintenant vous connecter."
+            );
+
+            return "redirect:/login";
+
+        } catch (RuntimeException e) {
+
+            redirectAttributes.addFlashAttribute(
+                    "error",
+                    e.getMessage()
+            );
+
+            return "redirect:/inscription";
+        }
+    }
+    }
+

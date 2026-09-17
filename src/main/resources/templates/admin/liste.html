@@ -78,8 +78,8 @@ layout:decorate=~{dashboard/accueil}>
         <thead class="table-dark">
         <tr>
             <th>ID</th>
-            <th>Nom</th>
-            <th>Prénom</th>
+            <th>Lastname</th>
+            <th>Firstname</th>
             <th>Username</th>
             <th>Rôle</th>
             <th width="180">Actions</th>
@@ -90,8 +90,8 @@ layout:decorate=~{dashboard/accueil}>
 
         <tr th:each="user : ${utilisateurs}">
             <td th:text="${user.id}"></td>
-            <td th:text="${user.nom}"></td>
-            <td th:text="${user.prenom}"></td>
+            <td th:text="${user.lastname}"></td>
+            <td th:text="${user.firstname}"></td>
             <td th:text="${user.username}"></td>
             <td th:text="${user.role}"></td>
 

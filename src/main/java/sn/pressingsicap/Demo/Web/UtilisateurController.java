@@ -32,6 +32,7 @@ public class UtilisateurController {
     public String getUtilisateur (Model model) {
         model.addAttribute("utilisateurs", utilisateurService.listUtilisateur());//Pour la liste
         model.addAttribute("utilisateur", new Utilisateur());//Pour le formulaire
+
         return "admin/liste";
     }
 

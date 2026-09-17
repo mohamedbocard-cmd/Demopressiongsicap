@@ -41,13 +41,13 @@ public class PaiementController {
     @PreAuthorize("hasAnyRole('ADMIN', 'GERANT')")
     public String listPaiement(Model model) {
         model.addAttribute("paiements",paiementService.listPaiement());//Pour la liste
-//        model.addAttribute("paiement",new Paiement());//Pour le formulaie
+        model.addAttribute("paiement",new Paiement());//Pour le formulaie
 
         model.addAttribute("commandes", commandeService.listCommande());//Pour la liste
-//        model.addAttribute("commande", new Commande());//Pour le formulaire
+        model.addAttribute("commande", new Commande());//Pour le formulaire
 
         model.addAttribute("clients", clientService.listerTousLesClients());//Pour la liste
-//        model.addAttribute("client", new Client());//Pour le formulaire
+        model.addAttribute("client", new Client());//Pour le formulaire
         return "paiements/liste";
 
     }

@@ -13,7 +13,6 @@ public class LogoutController {
   @PostMapping(value = "/logout")
     public ResponseEntity<Void> logout(HttpServletRequest request) {
 
-       // 1. Récupère la session actuelle sans en créer une nouvelle
         HttpSession session = request.getSession(false);
         if (session != null) {
            session.invalidate(); // Tue la session HTTP
@@ -21,7 +20,6 @@ public class LogoutController {
         }
         return ResponseEntity.noContent().build();
 
-//      redirectAttributes.addFlashAttribute("message", "Vous êtes bien déconnecté.");
 
 
 

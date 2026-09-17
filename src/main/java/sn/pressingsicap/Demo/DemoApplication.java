@@ -47,7 +47,7 @@ public class DemoApplication {
 	}
 
 	@Bean
-	CommandLineRunner commandLineRunner(ArticleRepository articleRepository,ClientRepository clientRepository, UtilisateurRepository utilisateurRepository, PaiementRepository paiementRepository, CommandeRepository commandeRepository) {
+	CommandLineRunner commandLineRunner(DetailCommandeRepository detailCommandeRepository,ArticleRepository articleRepository,ClientRepository clientRepository, UtilisateurRepository utilisateurRepository, PaiementRepository paiementRepository, CommandeRepository commandeRepository) {
 		return args -> {
 			Client client1 =new Client();
 					client1.setNom("soumare");
@@ -94,26 +94,26 @@ public class DemoApplication {
 			article.setStatut(StatutArticle.RECU);
 			article.setCommande(commande);
 //			article.setCategorie(new Categorie());
-//
+
 			Utilisateur ut = Utilisateur.builder()
-					.nom("Saw")
-					.prenom("ba ka")
+					.lastname("Saw")
+					.firstname("Khadir")
 					.username("Saw@gmail.com")
 					.password(passwordEncoder.encode("passer123"))
 					.role(Role.ROLE_ADMIN)
 					.build();
 ////
 			Utilisateur ut1 = Utilisateur.builder()
-					.nom("Tall")
-					.prenom("fallou")
+					.lastname("Tall")
+					.firstname("Mohamed")
 					.username("tall@gmail.com")
 					.password(passwordEncoder.encode("passer123"))
 					.role(Role.ROLE_GERANT)
 					.build();
 
 			Utilisateur ut3 = Utilisateur.builder()
-					.nom("sarr")
-					.prenom("fallou")
+					.lastname("sarr")
+					.firstname("fallou")
 					.username("fallou@gmail.com")
 					.password(passwordEncoder.encode("passer123"))
 					.role(Role.ROLE_EMPLOYER)
@@ -121,14 +121,15 @@ public class DemoApplication {
 
 
 			Utilisateur ut2 = Utilisateur.builder()
-					.nom("Diagana")
-					.prenom("fallou")
+					.lastname("Diagana")
+					.firstname("khassime")
 					.username("diag@gmail.com")
 					.password(passwordEncoder.encode("passer123"))
 					.role(Role.ROLE_EMPLOYER)
 					.build();
-//
-////
+
+
+
 			clientRepository.save(client1);
 			clientRepository.save(client2);
 			commandeRepository.save(commande);
@@ -139,17 +140,17 @@ public class DemoApplication {
 			utilisateurRepository.save(ut3);
 			articleRepository.save(article);
 
-////
-////
+
 			System.out.println("Client enregistré : " + client1.getNom());
 			System.out.println("Client enregistré : " + client2.getNom());
-			System.out.println("utilisateur  enregistré : " + ut.getPrenom());
-			System.out.println("utilisateur1  enregistré : " + ut1.getPrenom());
-			System.out.println("utilisateur2  enregistré : " + ut2.getPrenom());
-			System.out.println("utilisateur3  enregistré : " + ut3.getPrenom());
+			System.out.println("utilisateur  enregistré : " + ut.getFirstname());
+			System.out.println("utilisateur1  enregistré : " + ut1.getFirstname());
+			System.out.println("utilisateur2  enregistré : " + ut2.getFirstname());
+			System.out.println("utilisateur3  enregistré : " + ut3.getFirstname());
 			System.out.println("commande   enregistré succées : " + commande.getId());
 			System.out.println("article enregistré succées : " + article.getNom());
 			System.out.println("paiement enregistré succées : " + paiement.getId());
+//			System.out.println("detailcommande enregistré succées : " + detailCommande.getId());
 ////
 ////
 			clientRepository.findAll().forEach(c -> {

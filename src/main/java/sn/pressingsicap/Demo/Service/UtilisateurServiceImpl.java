@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import sn.pressingsicap.Demo.Dto.InscriptionDTO;
+import sn.pressingsicap.Demo.Models.Role;
 import sn.pressingsicap.Demo.Models.Utilisateur;
 import sn.pressingsicap.Demo.Repository.UtilisateurRepository;
 
@@ -48,6 +50,33 @@ public class UtilisateurServiceImpl implements UtilisateurService {
     public void deleteUtilisateurById(Long id) { //supression Id utilisateur
         utilisateurRepository.deleteById(id);
 
+    }
+
+    @Override
+    public void inscrire(InscriptionDTO dto) {
+        if (utilisateurRepository.existsByUsername(dto.getUsername())) {
+            throw new RuntimeException("Cet email existe déjà");
+        }
+
+        if (!dto.getPassword().equals(dto.getConfirmPassword())) {
+            throw new RuntimeException("Les mots de passe ne correspondent pas");
+        }
+
+        Utilisateur utilisateur = new Utilisateur();
+
+        utilisateur.setFirstname(dto.getFirstname());
+        utilisateur.setLastname(dto.getLastname());
+        utilisateur.setUsername(dto.getUsername());
+
+        // IMPORTANT : ne jamais enregistrer le mot de passe en clair
+        utilisateur.setPassword(
+                passwordEncoder.encode(dto.getPassword())
+        );
+
+        // Rôle par défaut
+        utilisateur.setRole(Role.ROLE_EMPLOYER);
+
+        utilisateurRepository.save(utilisateur);
+    }
 
     }
-}

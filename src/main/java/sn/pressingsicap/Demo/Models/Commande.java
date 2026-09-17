@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 @Entity
-@Data
+//@Data
 @Getter
 @Setter
 @NoArgsConstructor
@@ -49,5 +49,12 @@ public class Commande {
 
     @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Paiement> paiement = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true) /// si une article nest plus lie a categorie il va le supprime dans la base.)
+    private List<DetailCommande> details = new ArrayList<>();
+
+
+
 
 }

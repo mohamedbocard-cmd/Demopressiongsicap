@@ -2,7 +2,7 @@
 <html lang="fr"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
->
+      xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
 
     <meta charset="UTF-8"/>
@@ -56,31 +56,56 @@
             <a th:href="@{/dashboard}">
                 🏠 Dashboard
             </a>
-
+            <li sec:authorize="hasAnyRole('ADMIN', 'GERANT')">
             <a th:href="@{/clients/liste}">
                 👤 Clients
             </a>
+            </li>
 
+            <li sec:authorize="hasAnyRole('ADMIN', 'GERANT')">
             <a th:href="@{/commandes/liste}">
                 📦 Commandes
             </a>
+            </li>
 
+            <li sec:authorize="hasAnyRole('EMPLOYER','ADMIN', 'GERANT')">
             <a th:href="@{/articles/liste}">
                 👔 Articles
             </a>
-
+            </li>
+            <li sec:authorize="hasAnyRole('ADMIN', 'GERANT')">
             <a th:href="@{/paiements/liste}">
                 💳 Paiement
             </a>
+            </li>
 
+            <li sec:authorize="hasRole('ADMIN')">
             <a th:href="@{/admin/liste}">
                 👥 Utilisateurs
             </a>
+            </li>
 
+            <li sec:authorize="hasAnyRole('ADMIN', 'GERANT')">
+                <a th:href="@{/factures/liste}">
+                     Facture
+                </a>
+            </li>
+
+
+
+            <li sec:authorize="hasAnyRole('ADMIN', 'GERANT')">
             <a th:href="@{/categories/liste}">
                 🗂️ Catégorie
 
             </a>
+            </li>
+
+            <li sec:authorize="hasAnyRole('ADMIN', 'GERANT')">
+            <a th:href="@{/detailcommandes/liste}">
+                🗃️ DetailCommandes
+
+            </a>
+            </li>
 
             <a th:href="@{/logout}">
                 🚪 Déconnexion
@@ -97,15 +122,9 @@
                         Tableau de Bord
                     </span>
 
-                    <div th:if="${username}">
-                        Bonjour, <span th:text="${username}"></span> !
+                    <div th:if="${firstname}">
+                        Bonjour, <span th:text="${firstname}"></span> !
                     </div>
-
-<!--                    <div th:unless="${username}">-->
-<!--                        Bonjour, Invité !-->
-<!--                    </div>-->
-
-
 
                 </div>
             </nav>

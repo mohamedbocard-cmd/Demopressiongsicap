@@ -1,86 +1,540 @@
 <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
+
 <head>
-    <title>Connexion</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <title>Pressing Sicap - Connexion</title>
 
-    <!--===============================================================================================-->
-    <link rel="icon" type="image/png" th:href="@{/login/images/icons/favicon.ico}">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" th:href="@{/login/vendor/bootstrap/css/bootstrap.min.css}">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" th:href="@{/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" th:href="@{/login/fonts/Linearicons-Free-v1.0.0/icon-font.min.css}">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" th:href="@{/login/vendor/animate/animate.css}">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" th:href="@{/login/vendor/css-hamburgers/hamburgers.min.css}">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" th:href="@{/login/vendor/animsition/css/animsition.min.css}">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" th:href="@{/login/vendor/select2/select2.min.css}">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" th:href="@{/login/vendor/daterangepicker/daterangepicker.css}">
-    <!--===============================================================================================-->
-    <link rel="stylesheet" type="text/css" th:href="@{/login/css/util.css}">
-    <link rel="stylesheet" type="text/css" th:href="@{/login/css/main.css}">
-    <!--===============================================================================================-->
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+          rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #eaf4ff, #f8fbff);
+        }
+
+        .login-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 15px;
+        }
+
+        .login-card {
+            width: 100%;
+            max-width: 1050px;
+            min-height: 620px;
+            background: white;
+            border-radius: 25px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+            display: flex;
+        }
+
+        /* =========================
+           PARTIE GAUCHE
+        ========================== */
+
+        .login-image {
+            width: 50%;
+            position: relative;
+
+            background-image:
+                    linear-gradient(
+                            rgba(0, 83, 160, 0.65),
+                            rgba(0, 42, 90, 0.75)
+                    ),
+                    url('/images/bg-1.jpg');
+
+            background-size: cover;
+            background-position: center;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .image-content {
+            text-align: center;
+            padding: 40px;
+            z-index: 2;
+        }
+
+        .logo-icon {
+            width: 85px;
+            height: 85px;
+            margin: auto;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            font-size: 40px;
+
+            border: 2px solid rgba(255, 255, 255, 0.5);
+            margin-bottom: 25px;
+        }
+
+        .image-content h1 {
+            font-size: 35px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .image-content p {
+            font-size: 15px;
+            line-height: 1.8;
+            opacity: 0.9;
+        }
+
+        .service-list {
+            margin-top: 30px;
+            text-align: left;
+            display: inline-block;
+        }
+
+        .service-list div {
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+
+        .service-list i {
+            margin-right: 10px;
+        }
+
+        /* =========================
+           PARTIE DROITE
+        ========================== */
+
+        .login-form {
+            width: 50%;
+            padding: 55px 60px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .welcome-text {
+            margin-bottom: 35px;
+        }
+
+        .welcome-text h2 {
+            font-size: 30px;
+            font-weight: 700;
+            color: #172b4d;
+            margin-bottom: 8px;
+        }
+
+        .welcome-text p {
+            color: #8993a4;
+            font-size: 14px;
+        }
+
+        /* =========================
+           INPUTS
+        ========================== */
+
+        .form-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: #344563;
+        }
+
+        .input-group {
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .input-group-text {
+            background: #f4f7fb;
+            border: 1px solid #e1e7ef;
+            border-right: none;
+            color: #0d6efd;
+            width: 48px;
+            justify-content: center;
+        }
+
+        .form-control {
+            height: 52px;
+            border: 1px solid #e1e7ef;
+            border-left: none;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            box-shadow: none;
+            border-color: #0d6efd;
+        }
+
+        .input-group:focus-within .input-group-text {
+            border-color: #0d6efd;
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #8993a4;
+            z-index: 10;
+        }
+
+        /* =========================
+           BOUTON
+        ========================== */
+
+        .btn-login {
+            height: 52px;
+            border: none;
+            border-radius: 10px;
+
+            background: linear-gradient(
+                    135deg,
+                    #0d6efd,
+                    #0056b3
+            );
+
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+
+            transition: all 0.3s ease;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-2px);
+
+            box-shadow:
+                    0 10px 25px rgba(13, 110, 253, 0.3);
+        }
+
+        /* =========================
+           ALERTES
+        ========================== */
+
+        .alert {
+            border-radius: 10px;
+            font-size: 13px;
+        }
+
+        /* =========================
+           REGISTER
+        ========================== */
+
+        .register-text {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 13px;
+            color: #8993a4;
+        }
+
+        .register-text a {
+            color: #0d6efd;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .register-text a:hover {
+            text-decoration: underline;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================== */
+
+        @media (max-width: 768px) {
+
+            .login-card {
+                flex-direction: column;
+                min-height: auto;
+            }
+
+            .login-image {
+                width: 100%;
+                min-height: 280px;
+            }
+
+            .login-form {
+                width: 100%;
+                padding: 40px 25px;
+            }
+
+            .image-content h1 {
+                font-size: 28px;
+            }
+
+            .service-list {
+                display: none;
+            }
+        }
+
+    </style>
+
 </head>
+
 <body>
 
-<div class="limiter">
-    <div class="container-login100" style="background-image: url('images/bg-01.jpg');">
-        <div class="wrap-login100 p-t-30 p-b-50">
-				<span class="login100-form-title p-b-41">
-					Account Login
-				</span>
-            <form th:action="@{/login}" method="post" class="login100-form validate-form p-b-33 p-t-5">
+<div class="login-container">
 
-                <div class="wrap-input100 validate-input" data-validate = "Enter username">
-                    <label>
-                        <input class="input100" type="text" name="username" id="username" placeholder="User name"/>
-                    </label>
+    <div class="login-card">
+
+        <!-- =========================
+             IMAGE / PRESENTATION
+        ========================== -->
+
+        <div class="login-image">
+
+            <div class="image-content">
+
+                <div class="logo-icon">
+                    <i class="fa-solid fa-shirt"></i>
                 </div>
 
-                <div class="wrap-input100 validate-input" data-validate="Enter password">
-                    <label>
-                        <input class="input100" type="password" name="password" id="password" placeholder="Password"/>
-                    </label>
+                <h1>Pressing Sicap</h1>
+
+                <p>
+                    Bienvenue dans votre espace de gestion.
+                    Gérez facilement vos clients, commandes,
+                    articles et paiements.
+                </p>
+
+                <div class="service-list">
+
+                    <div>
+                        <i class="fa-solid fa-circle-check"></i>
+                        Gestion des clients
+                    </div>
+
+                    <div>
+                        <i class="fa-solid fa-circle-check"></i>
+                        Gestion des commandes
+                    </div>
+
+                    <div>
+                        <i class="fa-solid fa-circle-check"></i>
+                        Suivi des articles
+                    </div>
+
+                    <div>
+                        <i class="fa-solid fa-circle-check"></i>
+                        Gestion des paiements
+                    </div>
+
                 </div>
 
-                <div class="container-login100-form-btn m-t-32">
-                    <button class="btn btn-lg btn-primary btn-block" name="Submit" value="Login"
-                            type="Submit" th:text="Login">
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             FORMULAIRE
+        ========================== -->
+
+        <div class="login-form">
+
+            <div class="welcome-text">
+
+                <h2>Bienvenue 👋</h2>
+
+                <p>
+                    Connectez-vous à votre espace de gestion
+                </p>
+
+            </div>
+
+
+            <!-- ALERT ERREUR -->
+
+            <div th:if="${param.error}"
+                 class="alert alert-danger">
+
+                <i class="fa-solid fa-circle-exclamation me-2"></i>
+
+                Nom d'utilisateur ou mot de passe incorrect.
+
+            </div>
+
+
+            <!-- ALERT LOGOUT -->
+
+            <div th:if="${param.logout}"
+                 class="alert alert-success">
+
+                <i class="fa-solid fa-circle-check me-2"></i>
+
+                Vous êtes déconnecté avec succès.
+
+            </div>
+
+
+            <!-- FORMULAIRE -->
+
+            <form th:action="@{/login}" method="post">
+
+
+                <!-- USERNAME -->
+
+                <div class="mb-4">
+
+                    <label for="username"
+                           class="form-label">
+
+                        Nom d'utilisateur
+
+                    </label>
+
+                    <div class="input-group">
+
+                        <span class="input-group-text">
+
+                            <i class="fa-solid fa-user"></i>
+
+                        </span>
+
+                        <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                class="form-control"
+                                placeholder="Entrez votre username"
+                                autocomplete="off"
+                                required>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PASSWORD -->
+
+                <div class="mb-4">
+
+                    <label for="password"
+                           class="form-label">
+
+                        Mot de passe
+
+                    </label>
+
+                    <div class="input-group password-container">
+
+                        <span class="input-group-text">
+
+                            <i class="fa-solid fa-lock"></i>
+
+                        </span>
+
+                        <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                class="form-control pe-5"
+                                placeholder="Entrez votre mot de passe"
+                                autocomplete="off"
+                                required>
+
+                        <i class="fa-solid fa-eye password-toggle"
+                           id="togglePassword"></i>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BOUTON -->
+
+                <div class="d-grid">
+
+                    <button
+                            type="submit"
+                            class="btn btn-login">
+
+                        <i class="fa-solid fa-right-to-bracket me-2"></i>
+
+                        Se connecter
+
                     </button>
+
                 </div>
 
             </form>
+
+
+            <!-- INSCRIPTION -->
+
+            <div class="register-text">
+
+                Vous n'avez pas encore de compte ?
+
+                <a th:href="@{/inscription}">
+                    Créer un compte
+                </a>
+
+            </div>
+
         </div>
+
     </div>
+
 </div>
 
-<div id="dropDownSelect1"></div>
 
-<!--===============================================================================================-->
-<script th:src="@{/login/vendor/jquery/jquery-3.2.1.min.js}"></script>
-<!--===============================================================================================-->
-<script th:src="@{/login/vendor/animsition/js/animsition.min.js}"></script>
-<!--===============================================================================================-->
-<script th:src="@{/login/vendor/bootstrap/js/popper.js}"></script>
-<script th:src="@{/login/vendor/bootstrap/js/bootstrap.min.js}"></script>
-<!--===============================================================================================-->
-<script th:src="@{/login/vendor/select2/select2.min.js}"></script>
-<!--===============================================================================================-->
-<script th:src="@{/login/vendor/daterangepicker/moment.min.js}"></script>
-<script th:src="@{/login/vendor/daterangepicker/daterangepicker.js}"></script>
-<!--===============================================================================================-->
-<script th:src="@{/login/vendor/countdowntime/countdowntime.js}"></script>
-<!--===============================================================================================-->
-<script th:src="@{/login/js/main.js}"></script>
+<!-- =========================
+     JAVASCRIPT
+========================== -->
+
+<script>
+
+    const togglePassword =
+        document.getElementById('togglePassword');
+
+    const password =
+        document.getElementById('password');
+
+    togglePassword.addEventListener('click', function () {
+
+        const type =
+            password.getAttribute('type') === 'password'
+                ? 'text'
+                : 'password';
+
+        password.setAttribute('type', type);
+
+        this.classList.toggle('fa-eye');
+        this.classList.toggle('fa-eye-slash');
+
+    });
+
+</script>
+
 </body>
 </html>

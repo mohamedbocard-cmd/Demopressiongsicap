@@ -32,7 +32,7 @@ public class ArticleController {
     }
 
     @GetMapping("/liste")
-    @PreAuthorize("hasAnyRole('ADMIN','GERANT')")
+    @PreAuthorize("hasAnyRole('ADMIN','GERANT','EMPLOYER')")
     public String listArticle (Model model) {
         model.addAttribute("commande", commandeService.listCommande());//Pour la liste
         model.addAttribute("article", new Article());
@@ -40,15 +40,12 @@ public class ArticleController {
         model.addAttribute("categories", categorieService.listCategorie());//Pour la liste
 
 
-
         return "articles/liste";
     }
 
 
-
-
     @PostMapping("/save")
-    @PreAuthorize("hasAnyRole('ADMIN','GERANT')")
+    @PreAuthorize("hasAnyRole('ADMIN','GERANT','EMPLOYER')")
     public String addNewArticle(@ModelAttribute Article article, RedirectAttributes redirectAttributes) {
         if (article.getStatut() == null) {
             redirectAttributes.addFlashAttribute(
@@ -79,7 +76,7 @@ public class ArticleController {
     }
 
     @GetMapping("/edit/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','GERANT')")
+    @PreAuthorize("hasAnyRole('ADMIN','GERANT','EMPLOYER')")
     public String modifierArticle(@PathVariable Long id, Model model) {
 
         Article article = articleService.getArticleById(id)
@@ -100,7 +97,7 @@ public class ArticleController {
     }
 
     @GetMapping("/ajouter")
-    @PreAuthorize("hasAnyRole('ADMIN','GERANT')")
+    @PreAuthorize("hasAnyRole('ADMIN','GERANT','EMPLOYER')")
     public String ajouterFormArticle(Model model) {
         model.addAttribute("article", new Article());
         model.addAttribute("commandes", commandeService.listCommande());
@@ -113,7 +110,7 @@ public class ArticleController {
 
 
     @GetMapping("/delete/{id}")
-    @PreAuthorize("hasAnyRole('ADMIN','GERANT')")
+    @PreAuthorize("hasAnyRole('ADMIN','GERANT','EMPLOYER')")
     public String deleteArticle(@PathVariable Long id,RedirectAttributes redirectAttributes){
         try {
             articleService.deleteArticleById(id);
@@ -132,4 +129,5 @@ public class ArticleController {
         }
         return "redirect:/articles/liste";
     }
+
 }
