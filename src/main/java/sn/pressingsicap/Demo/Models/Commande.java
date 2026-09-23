@@ -4,10 +4,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 //@Data
@@ -54,7 +55,7 @@ public class Commande {
     @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true) /// si une article nest plus lie a categorie il va le supprime dans la base.)
     private List<DetailCommande> details = new ArrayList<>();
 
-
-
+    @OneToOne(mappedBy = "commande")
+    private Facture facture;
 
 }

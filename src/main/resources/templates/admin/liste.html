@@ -88,7 +88,7 @@ layout:decorate=~{dashboard/accueil}>
 
         <tbody>
 
-        <tr th:each="user : ${utilisateurs}">
+        <tr th:each="user : ${utilisateurs.content}">
             <td th:text="${user.id}"></td>
             <td th:text="${user.lastname}"></td>
             <td th:text="${user.firstname}"></td>
@@ -120,6 +120,38 @@ layout:decorate=~{dashboard/accueil}>
         </tbody>
 
     </table>
+        <!--pagination-->
+    <ul class="pagination">
+
+        <li class="page-item"
+            th:classappend="${currentPage == 0} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/admin/liste(page=${currentPage - 1}, size=3)}">
+                Précédent
+            </a>
+        </li>
+
+        <li class="page-item"
+            th:each="p, stat : ${pages}"
+            th:classappend="${stat.index == currentPage} ? 'active'">
+
+            <a class="page-link"
+               th:href="@{/admin/liste(page=${stat.index}, size=3)}"
+               th:text="${stat.index + 1}">
+            </a>
+        </li>
+
+        <li class="page-item"
+            th:classappend="${currentPage + 1 >= utilisateurs.totalPages} ? 'disabled'">
+            <a class="page-link"
+               th:href="@{/admin/liste(page=${currentPage + 1}, size=3)}">
+                Suivant
+            </a>
+        </li>
+
+    </ul>
+    <!--pagination-->
+
 
 </div>
 </div>

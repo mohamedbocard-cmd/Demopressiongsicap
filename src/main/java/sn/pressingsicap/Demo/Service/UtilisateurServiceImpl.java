@@ -1,9 +1,9 @@
 package sn.pressingsicap.Demo.Service;
 
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import sn.pressingsicap.Demo.Dto.InscriptionDTO;
@@ -14,7 +14,6 @@ import sn.pressingsicap.Demo.Repository.UtilisateurRepository;
 import java.util.List;
 import java.util.Optional;
 @Service
-//@RequiredArgsConstructor
 @Transactional
 @CacheConfig(cacheNames = "utilisateurs")
 public class UtilisateurServiceImpl implements UtilisateurService {
@@ -79,4 +78,9 @@ public class UtilisateurServiceImpl implements UtilisateurService {
         utilisateurRepository.save(utilisateur);
     }
 
+    @Override
+    public Page<Utilisateur> getAllUserByPage(int page, int size) {
+        return utilisateurRepository.findAll(PageRequest.of(page, size));
     }
+
+}

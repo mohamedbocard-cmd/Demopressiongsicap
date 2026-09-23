@@ -38,12 +38,12 @@
     </a>
   </div>
 
-  <!-- Message de succès -->
+  <!-- ici Message de succès -->
   <div th:if="${success}" class="alert alert-success">
     <span th:text="${success}"></span>
   </div>
 
-  <!-- Message d'erreur -->
+  <!-- et la Message d'erreur -->
   <div th:if="${error}" class="alert alert-danger">
     <span th:text="${error}"></span>
   </div>
@@ -155,6 +155,15 @@
 
     </tbody>
   </table>
+
+<!--  <ul class="nav nav-pills">-->
+<!--    <li th:each="page, status:${pages}">-->
+<!--      <a th:class="${status.index==currentPage?'btn btn-primary':'btn'}"-->
+<!--          th:href="@{articles/liste(page=${status.index}, size=${size})}"-->
+<!--         th:text="${status.index}"></a>-->
+<!--    </li>-->
+
+<!--  </ul>-->
 
 </div>
 </div>

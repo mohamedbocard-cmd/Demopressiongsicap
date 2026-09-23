@@ -116,13 +116,10 @@ public class DetailCommandeController {
         model.addAttribute("detailcommande",detailCommande);
         model.addAttribute("detailcommandes", detailCommandeService.listDetailCommande());
         model.addAttribute("commandes", commandeService.listCommande());
-        model.addAttribute("commande", new Commande());
         //liste des Articles & le formulaire
         model.addAttribute("articles", articleService.listArticle());
-        model.addAttribute("article", new Article());
 
         model.addAttribute("clients", clientService.listerTousLesClients());
-        model.addAttribute("client", new Client());
 
         log.info("Modification du DetailCommande {} dans BD" , detailCommande.getCommande());
         return "detailcommandes/form-detailcommande";

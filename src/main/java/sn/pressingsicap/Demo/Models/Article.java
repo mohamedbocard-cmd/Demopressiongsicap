@@ -7,13 +7,13 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@Data
+//@Data
 @Getter
 @Setter
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+//@ToString
 @Builder
 public class Article {
 
@@ -42,6 +42,4 @@ public class Article {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL) /// si une article nest plus lie a categorie il va le supprime dans la base.)
     private List<DetailCommande> detailsCommandes  = new ArrayList<>();
 
-    @ManyToMany(mappedBy = "articles")
-    private List<Facture> factures = new ArrayList<>();
 }

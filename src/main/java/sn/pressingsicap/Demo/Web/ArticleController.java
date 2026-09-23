@@ -1,13 +1,13 @@
 package sn.pressingsicap.Demo.Web;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sn.pressingsicap.Demo.Exception.ArticleNotFoundException;
-import sn.pressingsicap.Demo.Exception.CommandeNotFoundException;
 import sn.pressingsicap.Demo.Models.Article;
 import sn.pressingsicap.Demo.Models.Commande;
 import sn.pressingsicap.Demo.Models.StatutArticle;
@@ -15,6 +15,7 @@ import sn.pressingsicap.Demo.Service.ArticleService;
 import sn.pressingsicap.Demo.Service.CategorieService;
 import sn.pressingsicap.Demo.Service.CommandeService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -33,10 +34,11 @@ public class ArticleController {
 
     @GetMapping("/liste")
     @PreAuthorize("hasAnyRole('ADMIN','GERANT','EMPLOYER')")
-    public String listArticle (Model model) {
-        model.addAttribute("commande", commandeService.listCommande());//Pour la liste
+    public String listArticle(Model model) {
+        model.addAttribute("commandes", commandeService.listCommande());//Pour la liste
         model.addAttribute("article", new Article());
         model.addAttribute("articles", articleService.listArticle());
+
         model.addAttribute("categories", categorieService.listCategorie());//Pour la liste
 
 
@@ -88,10 +90,9 @@ public class ArticleController {
         model.addAttribute("categories", categorieService.listCategorie());//Pour la liste
 
 
-        log.info("Modification l'article {} dans BD" , article.getNom());
+        log.info("Modification l'article {} dans BD", article.getNom());
 
         return "articles/form-article.html";
-
 
 
     }
@@ -111,7 +112,7 @@ public class ArticleController {
 
     @GetMapping("/delete/{id}")
     @PreAuthorize("hasAnyRole('ADMIN','GERANT','EMPLOYER')")
-    public String deleteArticle(@PathVariable Long id,RedirectAttributes redirectAttributes){
+    public String deleteArticle(@PathVariable Long id, RedirectAttributes redirectAttributes) {
         try {
             articleService.deleteArticleById(id);
 
@@ -130,4 +131,6 @@ public class ArticleController {
         return "redirect:/articles/liste";
     }
 
+
 }
+

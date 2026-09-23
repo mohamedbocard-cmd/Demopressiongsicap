@@ -123,10 +123,27 @@
 
                             <td th:text="${detailcommande.prixUnitaire}"></td>
 
-                            <td>
-                                <span th:text="${#numbers.formatDecimal(detailcommande.getMontanttotal, 1, 2)}">
+
+                            <td class="text-end">
+
+                                <strong>
+
+                                <span th:if="${detailcommande.montant_total != null}"
+                                      th:text="${#numbers.formatDecimal(detailcommande.montant_total, 1, 2)}">
+                                    0.00
                                 </span>
-                                0.00 FCFA</td>
+
+                                    <span th:unless="${detailcommande.montant_total != null}">
+                                    0.00
+                                </span>
+
+                                    <span> FCFA</span>
+
+                                </strong>
+
+                            </td>
+
+
 
                             <!-- Commande -->
                             <td>

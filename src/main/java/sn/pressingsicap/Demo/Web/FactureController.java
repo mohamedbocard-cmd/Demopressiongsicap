@@ -1,5 +1,6 @@
 package sn.pressingsicap.Demo.Web;
 
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -12,6 +13,7 @@ import sn.pressingsicap.Demo.Models.Facture;
 import sn.pressingsicap.Demo.Models.StatutArticle;
 import sn.pressingsicap.Demo.Models.StatutPaiement;
 import sn.pressingsicap.Demo.Service.ClientService;
+import sn.pressingsicap.Demo.Service.CommandeService;
 import sn.pressingsicap.Demo.Service.FactureService;
 
 import java.util.ArrayList;
@@ -19,13 +21,16 @@ import java.util.ArrayList;
 @Controller
 @Slf4j
 @RequestMapping("/factures")
+@Data
 public class FactureController {
     private final FactureService factureService;
     private final ClientService clientService;
+    private final CommandeService commandeService;
 
-    public FactureController(FactureService factureService, ClientService clientService) {
+    public FactureController(FactureService factureService, ClientService clientService, CommandeService commandeService) {
         this.factureService = factureService;
         this.clientService = clientService;
+        this.commandeService = commandeService;
     }
 
     @GetMapping("/liste")
@@ -34,6 +39,7 @@ public class FactureController {
         model.addAttribute("factures", factureService.listFacture());//Pour la liste
         model.addAttribute("facture", new Facture());
         model.addAttribute("clients", clientService.listerTousLesClients());
+        model.addAttribute("commandes", commandeService.listCommande());
         log.info("getAll liste facture");
 
         return "factures/liste";
@@ -72,6 +78,7 @@ public class FactureController {
 
         model.addAttribute("facture", facture);
         model.addAttribute("clients", clientService.listerTousLesClients());//Pour la liste
+        model.addAttribute("commandes", commandeService.listCommande());//Pour la liste
 
 
         log.info("Modification factures {} dans BD", facture.getId());
@@ -85,6 +92,7 @@ public class FactureController {
     public String ajouterFormfacture(Model model) {
         model.addAttribute("facture", new Facture());
         model.addAttribute("clients", clientService.listerTousLesClients());//Pour la liste
+        model.addAttribute("commandes", commandeService.listCommande());//Pour la liste
 
         log.info("affichage formulaire facture ");
         return "factures/form-facture";
@@ -112,4 +120,5 @@ public class FactureController {
         return "redirect:/factures/liste";
 
     }
+
 }

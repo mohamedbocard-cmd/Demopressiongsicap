@@ -1,6 +1,7 @@
 package sn.pressingsicap.Demo.Service;
 
 import jakarta.transaction.Transactional;
+import lombok.Data;
 import org.springframework.cache.annotation.CacheConfig;
 import org.springframework.stereotype.Service;
 import sn.pressingsicap.Demo.Models.Facture;
@@ -12,6 +13,7 @@ import java.util.Optional;
 @Service
 @Transactional
 @CacheConfig(cacheNames = "factures")
+@Data
 public class FactureServiceImpl implements FactureService{
 
     private final FactureRepository factureRepository;

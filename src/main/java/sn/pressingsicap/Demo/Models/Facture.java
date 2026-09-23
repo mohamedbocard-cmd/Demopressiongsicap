@@ -1,7 +1,11 @@
 package sn.pressingsicap.Demo.Models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import io.micrometer.core.instrument.config.MeterFilter;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -16,36 +20,55 @@ import java.util.List;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-//@ToString
-
+@Table(name = "facture")
+@EntityListeners(AuditingEntityListener.class)
 public class Facture implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @CreatedDate
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", timezone = "GMT")
     private LocalDateTime dateCreation;
+
+    @Column(name = "statutPaiement")
     private String statutPaiement;
+
+    @Column
     private BigDecimal montant_total;
 
-    private BigDecimal quantite;
+    private int quantite;
     private BigDecimal prix;
 
     private String numeroFacture;
-
 
     @ManyToOne
     @JoinColumn(name = "client_id")
     private Client client;
 
-    @ManyToMany
-    @JoinTable(
-            name = "facture_article",
-            joinColumns = @JoinColumn(name = "facture_id"),
-            inverseJoinColumns = @JoinColumn(name = "article_id")
-    )
-    private List<Article> articles = new ArrayList<>();
+    @OneToOne
+    @JoinColumn(name = "commande_id", unique = true)
+    private Commande commande;
 
-    // Le calcul se fait directement via un injection par constructeur
-//    @PrePersist
-//    @PreUpdate
+    /*@PrePersist: pour exécuter automatiquement une méthode juste avant*/
+    // qu'une entité ne soit enregistrée
+    // pour la première fois dans la base de données.
+
+   /// @PreUpdate: Il s'agit d'une fonctionnalité qui vous permet d' interrompre l'exécution de code de temps à autre
+    ///avant la mise à jour de l'opération de base de données .
+
+
+    @PrePersist
+    @PreUpdate
+    public void calculerMontantTotal() {
+
+        BigDecimal prixUnitaire =
+                prix != null ? prix : BigDecimal.ZERO;
+
+        montant_total = prixUnitaire.multiply(
+                BigDecimal.valueOf(quantite)
+        );
+    }
 }
+
+
+

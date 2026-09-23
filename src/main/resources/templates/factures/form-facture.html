@@ -104,6 +104,36 @@
                 </div>
                 <!-- Client -->
 
+                <!-- Commande -->
+                <div class="mb-3">
+
+                    <label for="commande" class="form-label">
+                        Commande
+                    </label>
+
+                    <select id="commande"
+                            th:field="*{commande}"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            -- Sélectionner une commande --
+                        </option>
+
+                        <option th:each="commande : ${commandes}"
+                                th:value="${commande.id}"
+                                th:text="|${commande.id} ${commande.numero_cmd}|"
+                                th:selected="${commande.id == facture?.commande?.id}">
+                        </option>
+
+
+                    </select>
+
+                </div>
+
+                <!-- Commande -->
+
+
                 <!-- QUANTITE + PRIX -->
 
                 <div class="row">

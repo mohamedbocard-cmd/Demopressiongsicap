@@ -1,7 +1,11 @@
 package sn.pressingsicap.Demo.Service;
 
 import jakarta.transaction.Transactional;
+import lombok.Data;
 import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sn.pressingsicap.Demo.Models.Article;
 import sn.pressingsicap.Demo.Repository.ArticleRepository;
@@ -42,4 +46,6 @@ public class ArticleServiceImpl implements ArticleService{
         articleRepository.deleteById(id);
 
     }
+
+
 }

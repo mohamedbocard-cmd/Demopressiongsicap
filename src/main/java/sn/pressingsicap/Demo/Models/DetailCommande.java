@@ -12,7 +12,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+//@ToString
 @Builder
 public class DetailCommande {
 
@@ -20,13 +20,13 @@ public class DetailCommande {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column
-    private Integer quantité;
-    @NotBlank(message = "prixUnitaire est obligatoire ")
+    private int quantité;
+    @NotBlank
     @Column(name = "prixUnitaire")
     private BigDecimal prixUnitaire;
 
-    @Column(name = "total")
-    private BigDecimal total;
+    @Column
+    private BigDecimal montant_total;
 
     @ManyToOne
     @JoinColumn(name = "commande_id")
@@ -42,14 +42,19 @@ public class DetailCommande {
     private Client client;
 
     /**
-     * this.prixUnitaire == null || vide il va retourne 0 au lieu erreure
-     * */
-    public BigDecimal getMontanttotal() {
-        if (this.prixUnitaire == null) {
-            return BigDecimal.ZERO;
-        }
-        // Conversion de la quantité en BigDecimal puis multiplication
-        return this.prixUnitaire.multiply(BigDecimal.valueOf(this.quantité));
-    }
+     *
+     */
 
+    @PrePersist
+    @PreUpdate
+    public void calculerMontantTotal() {
+
+        BigDecimal prixUni =
+                prixUnitaire != null ? prixUnitaire : BigDecimal.ZERO;
+
+        montant_total = prixUnitaire.multiply(
+                BigDecimal.valueOf(quantité)
+        );
+    }
 }
+

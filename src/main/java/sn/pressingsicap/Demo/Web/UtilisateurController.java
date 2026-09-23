@@ -1,10 +1,14 @@
 package sn.pressingsicap.Demo.Web;
 
+import jdk.jshell.execution.Util;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sn.pressingsicap.Demo.Exception.UtilisateurNotFoundException;
 import sn.pressingsicap.Demo.Models.Utilisateur;
@@ -29,11 +33,19 @@ public class UtilisateurController {
     **/
     @GetMapping("/liste")
     @PreAuthorize("hasRole('ADMIN')")
-    public String getUtilisateur (Model model) {
-        model.addAttribute("utilisateurs", utilisateurService.listUtilisateur());//Pour la liste
-        model.addAttribute("utilisateur", new Utilisateur());//Pour le formulaire
+    public String getUtilisateur (Model model,
+                                  @RequestParam(name = "page",defaultValue = "0")int page,
+                                    @RequestParam(name = "size",defaultValue = "3")int size
+                                      ){
+        Page<Utilisateur> utilisateurs = utilisateurService.getAllUserByPage(page, size);
+        model.addAttribute("utilisateurs", utilisateurs);//Pour le formulaire
+        model.addAttribute("currentPage", page);// affiche la page en cours qui est la page {0}
+        model.addAttribute("pages", new int[utilisateurs.getTotalPages()]);// il va calculer le nombre de pages.
+
 
         return "admin/liste";
+        // model.addAttribute("utilisateurs", utilisateurService.listUtilisateur());//Pour la liste
+
     }
 
 

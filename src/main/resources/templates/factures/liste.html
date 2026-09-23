@@ -126,6 +126,7 @@
                         <th>N° Facture</th>
                         <th>Date création</th>
                         <th>Client</th>
+                        <th>Commande</th>
                         <th>Quantité</th>
                         <th>Prix</th>
                         <th>Montant Total</th>
@@ -181,6 +182,26 @@
                             </span>
 
                         </td>
+                        <!-- Client -->
+
+
+                        <!-- Commande -->
+                        <td>
+
+                            <span th:if="${facture.commande != null}"
+                                  th:text="${facture.commande.numero_cmd}">
+                                Commande
+                            </span>
+
+                            <span th:unless="${facture.commande != null}"
+                                  class="text-muted">
+                                Aucune commande Trouvée
+                            </span>
+
+                        </td>
+
+                        <!-- Commande -->
+
 
 
                         <!-- Quantité -->
