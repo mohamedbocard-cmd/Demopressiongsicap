@@ -1,0 +1,4 @@
+#twilio:
+#  account_sid: ACb18b4a875d31c950bf9b12ccad402ca2
+#  auth_token: 21c8c06dfbbd1e5ad787d2fcfd4dda69
+#  from_phone_number: "+221772519225"

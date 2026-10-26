@@ -1,0 +1,772 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<jasperReport
+        xmlns="http://jasperreports.sourceforge.net/jasperreports"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="
+        http://jasperreports.sourceforge.net/jasperreports
+        http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+        name="factures"
+        pageWidth="842"
+        pageHeight="595"
+        orientation="Landscape"
+        columnWidth="782"
+        leftMargin="30"
+        rightMargin="30"
+        topMargin="30"
+        bottomMargin="30"
+        uuid="12345678-1234-1234-1234-123456789001">
+
+
+    <parameter name="TITRE" class="java.lang.String"/>
+
+    <!-- CHAMPS qui se trouve dans le programme ou classe-->
+
+    <field name="id" class="java.lang.Long"/>
+
+    <field name="numeroFacture" class="java.lang.String"/>
+
+    <field name="dateCreation" class="java.time.LocalDateTime"/>
+
+    <field name="client"
+           class="sn.pressingsicap.Demo.Models.Client"/>
+
+    <field name="commande"
+           class="sn.pressingsicap.Demo.Models.Commande"/>
+
+    <field name="article"
+           class="sn.pressingsicap.Demo.Models.Article"/>
+
+
+    <field name="quantite"
+           class="java.math.BigDecimal"/>
+
+    <field name="prix"
+           class="java.math.BigDecimal"/>
+
+    <field name="montant_total"
+           class="java.math.BigDecimal"/>
+
+    <field name="statutPaiement"
+           class="java.lang.String"/>
+
+
+    <!-- ===================================================== -->
+    <!-- TITRE -->
+    <!-- ===================================================== -->
+
+    <title>
+
+        <band height="100">
+
+            <!-- NOM DU PRESSING -->
+
+            <staticText>
+
+                <reportElement
+                        x="0"
+                        y="0"
+                        width="782"
+                        height="30"/>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle">
+
+                    <font
+                            size="22"
+                            isBold="true"/>
+
+                </textElement>
+
+                <text><![CDATA[PRESSING-SICAP]]></text>
+
+            </staticText>
+
+
+            <!-- DESCRIPTION -->
+
+            <staticText>
+
+                <reportElement
+                        x="0"
+                        y="30"
+                        width="782"
+                        height="20"/>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle">
+
+                    <font size="10"/>
+
+                </textElement>
+
+                <text><![CDATA[
+Service de lavage et nettoyage professionnel
+                ]]></text>
+
+            </staticText>
+
+
+            <!-- TITRE -->
+
+            <staticText>
+
+                <reportElement
+                        x="0"
+                        y="52"
+                        width="782"
+                        height="28"/>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle">
+
+                    <font
+                            size="18"
+                            isBold="true"/>
+
+                </textElement>
+
+                <text><![CDATA[LISTE DES FACTURES]]></text>
+
+            </staticText>
+
+
+            <!-- SOUS-TITRE -->
+
+            <textField>
+
+                <reportElement
+                        x="0"
+                        y="80"
+                        width="782"
+                        height="20"/>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle">
+
+                    <font size="10"/>
+
+                </textElement>
+
+                <textFieldExpression>
+                    <![CDATA[
+                    $P{TITRE} != null
+                    ? $P{TITRE}
+                    : ""
+                    ]]>
+                </textFieldExpression>
+
+            </textField>
+
+        </band>
+
+    </title>
+
+
+    <!-- ===================================================== -->
+    <!-- EN-TÊTE DU TABLEAU -->
+    <!-- ===================================================== -->
+
+    <columnHeader>
+
+        <band height="35">
+
+
+            <!-- ID -->
+
+            <staticText>
+
+                <reportElement
+                        x="0"
+                        y="0"
+                        width="40"
+                        height="35"
+                        backcolor="#198754"
+                        mode="Opaque"/>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle">
+
+                    <font
+                            size="9"
+                            isBold="true"/>
+
+                </textElement>
+
+                <text><![CDATA[ID]]></text>
+
+            </staticText>
+
+
+            <!-- NUMERO FACTURE -->
+
+            <staticText>
+
+                <reportElement
+                        x="40"
+                        y="0"
+                        width="105"
+                        height="35"
+                        backcolor="#198754"
+                        mode="Opaque"/>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle">
+
+                    <font
+                            size="9"
+                            isBold="true"/>
+
+                </textElement>
+
+                <text><![CDATA[N° Facture]]></text>
+
+            </staticText>
+
+
+            <!-- DATE -->
+
+            <staticText>
+
+                <reportElement
+                        x="145"
+                        y="0"
+                        width="110"
+                        height="35"
+                        backcolor="#198754"
+                        mode="Opaque"/>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle">
+
+                    <font
+                            size="9"
+                            isBold="true"/>
+
+                </textElement>
+
+                <text><![CDATA[Date création]]></text>
+
+            </staticText>
+
+
+            <!-- CLIENT -->
+
+            <staticText>
+
+                <reportElement
+                        x="255"
+                        y="0"
+                        width="125"
+                        height="35"
+                        backcolor="#198754"
+                        mode="Opaque"/>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle">
+
+                    <font
+                            size="9"
+                            isBold="true"/>
+
+                </textElement>
+
+                <text><![CDATA[Client]]></text>
+
+            </staticText>
+
+            <!--Client-->
+
+            <!--Article -->
+            <staticText>
+
+                <reportElement
+                        x="255"
+                        y="0"
+                        width="125"
+                        height="35"
+                        backcolor="#198754"
+                        mode="Opaque"/>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle">
+
+                    <font
+                            size="9"
+                            isBold="true"/>
+
+                </textElement>
+
+                <text><![CDATA[Article]]></text>
+
+            </staticText>
+
+          <!--Article -->
+
+
+
+
+
+
+
+
+
+
+            <!-- COMMANDE -->
+
+            <staticText>
+
+                <reportElement
+                        x="380"
+                        y="0"
+                        width="100"
+                        height="35"
+                        backcolor="#198754"
+                        mode="Opaque"/>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle">
+
+                    <font
+                            size="9"
+                            isBold="true"/>
+
+                </textElement>
+
+                <text><![CDATA[Commande]]></text>
+
+            </staticText>
+
+
+            <!-- QUANTITE -->
+
+            <staticText>
+
+                <reportElement
+                        x="480"
+                        y="0"
+                        width="55"
+                        height="35"
+                        backcolor="#198754"
+                        mode="Opaque"/>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle">
+
+                    <font
+                            size="9"
+                            isBold="true"/>
+
+                </textElement>
+
+                <text><![CDATA[Qté]]></text>
+
+            </staticText>
+
+
+            <!-- PRIX -->
+
+            <staticText>
+
+                <reportElement
+                        x="535"
+                        y="0"
+                        width="80"
+                        height="35"
+                        backcolor="#198754"
+                        mode="Opaque"/>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle">
+
+                    <font
+                            size="9"
+                            isBold="true"/>
+
+                </textElement>
+
+                <text><![CDATA[Prix]]></text>
+
+            </staticText>
+
+
+            <!-- TOTAL -->
+
+            <staticText>
+
+                <reportElement
+                        x="615"
+                        y="0"
+                        width="95"
+                        height="35"
+                        backcolor="#198754"
+                        mode="Opaque"/>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle">
+
+                    <font
+                            size="9"
+                            isBold="true"/>
+
+                </textElement>
+
+                <text><![CDATA[Montant Total]]></text>
+
+            </staticText>
+
+
+            <!-- STATUT -->
+
+            <staticText>
+
+                <reportElement
+                        x="710"
+                        y="0"
+                        width="72"
+                        height="35"
+                        backcolor="#198754"
+                        mode="Opaque"/>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle">
+
+                    <font
+                            size="9"
+                            isBold="true"/>
+
+                </textElement>
+
+                <text><![CDATA[Statut]]></text>
+
+            </staticText>
+
+        </band>
+
+    </columnHeader>
+
+
+    <!-- ===================================================== -->
+    <!-- DETAIL -->
+    <!-- ===================================================== -->
+
+    <detail>
+
+        <band height="32">
+
+
+            <!-- ID -->
+
+            <textField>
+
+                <reportElement
+                        x="0"
+                        y="0"
+                        width="40"
+                        height="32"/>
+
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle"/>
+
+                <textFieldExpression>
+                    <![CDATA[$F{id}]]>
+                </textFieldExpression>
+
+            </textField>
+
+
+            <!-- NUMERO FACTURE -->
+
+            <textField>
+
+                <reportElement
+                        x="40"
+                        y="0"
+                        width="105"
+                        height="32"/>
+
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle"/>
+
+                <textFieldExpression>
+                    <![CDATA[
+                    $F{numeroFacture} != null
+                    ? $F{numeroFacture}
+                    : "N/A"
+                    ]]>
+                </textFieldExpression>
+
+            </textField>
+
+
+            <!-- DATE -->
+
+            <textField pattern="dd/MM/yyyy HH:mm">
+
+                <reportElement
+                        x="145"
+                        y="0"
+                        width="110"
+                        height="32"/>
+
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle"/>
+
+                <textFieldExpression>
+                    <![CDATA[$F{dateCreation}]]>
+                </textFieldExpression>
+
+            </textField>
+
+
+            <!-- CLIENT -->
+
+            <textField>
+
+                <reportElement
+                        x="255"
+                        y="0"
+                        width="125"
+                        height="32"/>
+
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle"/>
+
+                <textFieldExpression>
+                    <![CDATA[
+                    $F{client} != null
+                    ?
+                    (
+                        $F{client}.getPrenom() != null
+                        ? $F{client}.getPrenom() + " "
+                        : ""
+                    )
+                    +
+                    (
+                        $F{client}.getNom() != null
+                        ? $F{client}.getNom()
+                        : ""
+                    )
+                    : "Aucun client"
+                    ]]>
+                </textFieldExpression>
+
+            </textField>
+
+
+            <!-- COMMANDE -->
+            <!-- CORRECTION IMPORTANTE -->
+
+            <textField>
+
+                <reportElement
+                        x="380"
+                        y="0"
+                        width="100"
+                        height="32"/>
+
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle"/>
+
+                <textFieldExpression>
+                    <![CDATA[
+                    $F{commande} != null
+                    ? "CMD-" + $F{commande}.getId()
+                    : "Aucune"
+                    ]]>
+                </textFieldExpression>
+
+            </textField>
+
+
+            <!-- QUANTITE -->
+
+            <textField>
+
+                <reportElement
+                        x="480"
+                        y="0"
+                        width="55"
+                        height="32"/>
+
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle"/>
+
+                <textFieldExpression>
+                    <![CDATA[
+                    $F{quantite} != null
+                    ? $F{quantite}
+                    : java.math.BigDecimal.ZERO
+                    ]]>
+                </textFieldExpression>
+
+            </textField>
+
+
+            <!-- PRIX -->
+
+            <textField pattern="#,##0 FCFA">
+
+                <reportElement
+                        x="535"
+                        y="0"
+                        width="80"
+                        height="32"/>
+
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+
+                <textElement
+                        textAlignment="Right"
+                        verticalAlignment="Middle"/>
+
+                <textFieldExpression>
+                    <![CDATA[
+                    $F{prix} != null
+                    ? $F{prix}
+                    : java.math.BigDecimal.ZERO
+                    ]]>
+                </textFieldExpression>
+
+            </textField>
+
+
+            <!-- MONTANT TOTAL -->
+
+            <textField pattern="#,##0 FCFA">
+
+                <reportElement
+                        x="615"
+                        y="0"
+                        width="95"
+                        height="32"/>
+
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+
+                <textElement
+                        textAlignment="Right"
+                        verticalAlignment="Middle">
+
+                    <font
+                            size="9"
+                            isBold="true"/>
+
+                </textElement>
+
+                <textFieldExpression>
+                    <![CDATA[
+                    $F{montant_total} != null
+                    ? $F{montant_total}
+                    : java.math.BigDecimal.ZERO
+                    ]]>
+                </textFieldExpression>
+
+            </textField>
+
+
+            <!-- STATUT -->
+
+            <textField>
+
+                <reportElement
+                        x="710"
+                        y="0"
+                        width="72"
+                        height="32"/>
+
+                <box>
+                    <pen lineWidth="0.5"/>
+                </box>
+
+                <textElement
+                        textAlignment="Center"
+                        verticalAlignment="Middle"/>
+
+                <textFieldExpression>
+                    <![CDATA[
+                    $F{statutPaiement} != null
+                    ? $F{statutPaiement}
+                    : "NON PAYE"
+                    ]]>
+                </textFieldExpression>
+
+            </textField>
+
+        </band>
+
+    </detail>
+
+
+    <!-- ===================================================== -->
+    <!-- PIED DE PAGE -->
+    <!-- ===================================================== -->
+
+<pageFooter>
+<band height="40">
+    <textField>
+        <reportElement
+                x="0"
+                y="10"
+                width="555"
+                height="20"/>
+
+        <textElement textAlignment="Center">
+            <font size="10"/>
+        </textElement>
+
+        <textFieldExpression>
+            <![CDATA[
+                "Merci pour votre confiance et votre compréhension."
+                ]]>
+        </textFieldExpression>
+    </textField>
+</band>
+</pageFooter>
+</jasperReport>

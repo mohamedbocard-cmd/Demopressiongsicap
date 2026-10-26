@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+       layout:decorate=~{dashboard/accueil} lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1">
+
+    <title>Formulaire Facture</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+    </script>
+</head>
+
+<body>
+<div layout:fragment="content" class="container">
+
+
+<div class="container mt-5">
+
+    <div class="card shadow">
+
+        <!-- HEADER -->
+        <div class="card-header bg-secondary text-white">
+            <h4 class="mb-0">
+                <span th:if="${facture.id == null}">
+                    Nouvelle facture
+                </span>
+
+                <span th:if="${facture.id != null}">
+                    Modifier la facture
+                </span>
+            </h4>
+        </div>
+
+        <div class="card-body">
+
+            <form th:action="@{/factures/ajouter}"
+                  th:object="${facture}"
+                  method="post">
+
+                <input type="hidden"
+                       th:field="*{id}">
+
+                <div class="row">
+
+                    <!-- NUMERO FACTURE -->
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Numéro de facture
+                        </label>
+
+                        <input type="text"
+                               class="form-control"
+                               th:field="*{numeroFacture}"
+                               required>
+
+                    </div>
+
+                    <!-- DATE-CREATION -->
+                    <div class="col-md-6 mb-3">
+
+                        <label class="form-label">
+                            Date de Creation
+                        </label>
+
+                        <input type="datetime-local"
+                               class="form-control"
+                               th:field="*{dateCreation}"
+                               required>
+
+                    </div>
+
+                </div>
+
+                <!-- Client -->
+                <div class="mb-3">
+
+                    <label for="client" class="form-label">
+                        Client
+                    </label>
+
+                    <select id="client"
+                            th:field="*{client}"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            -- Sélectionner un client --
+                        </option>
+
+                        <option th:each="client : ${clients}"
+                                th:value="${client.id}"
+                                th:text="${client.prenom + ' ' + client.nom}">
+                        </option>
+
+                    </select>
+
+                </div>
+                <!-- Client -->
+
+                <!-- Commande -->
+                <div class="mb-3">
+
+                    <label for="commande" class="form-label">
+                        Numero Commande
+                    </label>
+
+                    <select id="commande"
+                            th:field="*{commande}"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            -- Sélectionner une commande --
+                        </option>
+
+                        <option th:each="commande : ${commandes}"
+                                th:value="${commande.id}"
+                                th:text="|${commande.id} ${commande.numero_cmd}|">
+<!--                                th:selected="${commande.id == facture?.commande?.id}">-->
+                        </option>
+
+
+                    </select>
+
+                </div>
+
+                <!-- Commande -->
+
+
+                <!-- Article -->
+                <div class="mb-3">
+
+                    <label for="article" class="form-label">
+                        Article
+                    </label>
+
+                    <select id="article"
+                            th:field="*{article}"
+                            class="form-select"
+                            required>
+
+                        <option value="">
+                            -- Sélectionner un article --
+                        </option>
+
+                        <option th:each="article : ${articles}"
+                                th:value="${article.id}"
+                                th:text="|${article.id} ${article.nom}|">
+<!--                                th:selected="${article.id == facture?.article?.id}">-->
+                        </option>
+
+                    </select>
+
+                </div>
+                <!-- Article -->
+
+                <!-- QUANTITE + PRIX -->
+
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+
+                        <label for="quantite" class="form-label">
+                            Quantité
+                        </label>
+
+                        <input type="number"
+                               id="quantite"
+                               class="form-control"
+                               th:field="*{quantite}"
+                               min="1"
+                               value="1"
+                               required>
+
+                    </div>
+
+
+                    <!-- PRIX -->
+                    <div class="col-md-6 mb-3">
+
+                        <label for="prix" class="form-label">
+                            Prix unitaire
+                        </label>
+
+                        <div class="input-group">
+
+                            <input type="number"
+                                   id="prix"
+                                   class="form-control"
+                                   th:field="*{prix}"
+                                   step="0.01"
+                                   min="0"
+                                   placeholder="0.00"
+                                   required>
+
+                            <span class="input-group-text">
+            FCFA
+        </span>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- StatutPaiement -->
+                <div class="mb-3">
+
+                    <label for="statutPaiement" class="form-label">
+                        Statut
+                    </label>
+
+                    <select id="statutPaiement"
+                            class="form-select"
+                            th:field="*{statutPaiement}">
+
+                        <option value="">-- Choisir un statut --</option>
+
+                        <option value="LIVREE">
+                            LIVREE
+                        </option>
+                        <option value="EN_ATTENTE">
+                            EN_ATTENTE
+                        </option>
+
+                        <option value="Payé">
+                            Payé
+                        </option>
+
+                        <option value="NON_PAYÉ">
+                            Non_Payé
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- BOUTONS -->
+                <div class="d-flex justify-content-between mt-4">
+
+                    <a th:href="@{/factures/liste}"
+                       class="btn btn-secondary">
+                        ← Retour
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Enregistrer
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+    </div>
+</div>
+</body>
+
+</html>

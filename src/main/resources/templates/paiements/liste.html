@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{dashboard/accueil}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liste des paiements</title>
+</head>
+<div class="row g-4 mb-4">
+
+    <div class="col-md-3">
+        <div class="card bg-primary text-white shadow">
+            <div class="card-body">
+                <h5 class="card-title">Clients</h5>
+                <h2 th:text="${nombreClients}">0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card bg-success text-white shadow">
+            <div class="card-body">
+                <h5 class="card-title">Commandes</h5>
+                <h2 th:text="${nombreCommandes}">0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card bg-secondary text-white shadow">
+            <div class="card-body">
+                <h5 class="card-title">Utilisateurs</h5>
+                <h2 th:text="${nombreutilisateurs}">0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card bg-warning shadow">
+            <div class="card-body">
+                <h5 class="card-title">Articles</h5>
+                <h2 th:text="${nombreArticles}">0</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<body>
+
+<div layout:fragment="content" class="container mt-4">
+
+    <!-- Liste des paiements -->
+    <div class="card shadow">
+
+        <div class="card-header d-flex justify-content-between
+                    align-items-center flex-wrap gap-2">
+
+            <h2 class="mb-0">Liste des paiements</h2>
+
+            <a th:href="@{/paiements/ajouter}"
+               class="btn btn-primary">
+                + Nouveau paiement
+            </a>
+
+        </div>
+
+        <div class="card-body">
+
+            <!-- Message succès -->
+            <div th:if="${success}"
+                 class="alert alert-success alert-dismissible fade show"
+                 role="alert">
+
+                <span th:text="${success}"></span>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Fermer"></button>
+            </div>
+
+            <!-- Message erreur -->
+            <div th:if="${error}"
+                 class="alert alert-danger alert-dismissible fade show"
+                 role="alert">
+
+                <span th:text="${error}"></span>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Fermer"></button>
+            </div>
+
+            <!-- Tableau -->
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-striped
+                              table-hover align-middle">
+
+                    <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Montant total</th>
+                        <th>Montant avancé</th>
+                        <th>Montant restant</th>
+                        <th>Date paiement</th>
+                        <th>Numéro commande</th>
+                        <th>Client</th>
+                        <th>Mode paiement</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <tr th:each="paiement : ${paiements}">
+
+                        <!-- ID -->
+                        <td th:text="${paiement.id}"></td>
+
+                        <!-- Montant total -->
+                        <td class="text-nowrap">
+                            <span th:text="${#numbers.formatDecimal(
+                                paiement.montantTotal != null
+                                ? paiement.montantTotal : 0,
+                                0, 'COMMA', 0, 'POINT')}">
+                            </span> FCFA
+                        </td>
+
+                        <!-- Montant avancé -->
+                        <td class="text-nowrap">
+                            <span th:text="${#numbers.formatDecimal(
+                                paiement.montantAvance != null
+                                ? paiement.montantAvance : 0,
+                                0, 'COMMA', 0, 'POINT')}">
+                            </span> FCFA
+                        </td>
+
+                        <!-- Montant restant -->
+                        <td class="text-nowrap fw-bold"
+                            th:classappend="${
+                                paiement.montantRestant != null
+                                and paiement.montantRestant.signum() > 0
+                                ? 'text-danger' : 'text-success'}">
+
+                            <span th:text="${#numbers.formatDecimal(
+                                paiement.montantRestant != null
+                                ? paiement.montantRestant : 0,
+                                0, 'COMMA', 0, 'POINT')}">
+                            </span> FCFA
+                        </td>
+
+                        <!-- Date paiement -->
+                        <td class="text-nowrap"
+                            th:text="${paiement.datePaiement != null
+                            ? #temporals.format(
+                                paiement.datePaiement, 'dd/MM/yyyy HH:mm')
+                            : 'Non renseignée'}">
+                        </td>
+
+                        <!-- Commande -->
+                        <td>
+                            <span th:if="${paiement.commande != null}"
+                                  th:text="|${paiement.commande.id} - ${paiement.commande.numero_cmd}|">
+                            </span>
+
+                            <span th:if="${paiement.commande == null}"
+                                  class="text-muted">
+                                Aucune commande
+                            </span>
+                        </td>
+
+                        <!-- Client -->
+                        <td>
+                            <span th:if="${paiement.commande != null
+                                and paiement.commande.client != null}"
+                                  th:text="|${paiement.commande.client.prenom} ${paiement.commande.client.nom}|">
+                            </span>
+
+                            <span th:if="${paiement.commande == null
+                                or paiement.commande.client == null}"
+                                  class="text-muted">
+                                Aucun client
+                            </span>
+                        </td>
+
+                        <!-- Mode de paiement -->
+                        <td>
+                            <span th:if="${paiement.modePaiement != null}"
+                                  th:text="${paiement.modePaiement}"
+                                  class="badge bg-primary">
+                            </span>
+
+                            <span th:if="${paiement.modePaiement == null}"
+                                  class="text-muted">
+                                Non défini
+                            </span>
+                        </td>
+
+                        <!-- Statut -->
+                        <td>
+                            <span th:if="${paiement.statut != null}"
+                                  th:text="${paiement.statut}"
+                                  class="badge"
+                                  th:classappend="${
+                                      paiement.statut.name() == 'PAYE'
+                                      ? 'bg-success'
+                                      : paiement.statut.name() == 'AVANCE'
+                                      ? 'bg-warning text-dark'
+                                      : 'bg-danger'}">
+                            </span>
+
+                            <span th:if="${paiement.statut == null}"
+                                  class="text-muted">
+                                Aucun statut
+                            </span>
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="text-nowrap">
+
+                            <a th:href="@{/paiements/edit/{id}(id=${paiement.id})}"
+                               class="btn btn-warning btn-sm">
+                                Modifier
+                            </a>
+
+                            <a th:href="@{/paiements/delete/{id}(id=${paiement.id})}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Voulez-vous vraiment supprimer ce paiement ?');">
+                                Supprimer
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    <!-- Aucun paiement -->
+                    <tr th:if="${#lists.isEmpty(paiements)}">
+                        <td colspan="10"
+                            class="text-center text-muted py-4">
+                            Aucun paiement enregistré.
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>

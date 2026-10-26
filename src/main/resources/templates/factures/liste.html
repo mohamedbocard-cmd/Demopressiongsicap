@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{dashboard/accueil}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Liste des factures</title>
+</head>
+
+<body>
+<!-- Cartes du tableau de bord -->
+<div class="row g-4 mb-4">
+
+    <div class="col-md-3">
+        <div class="card text-bg-primary shadow">
+            <div class="card-body">
+                <h5>Clients</h5>
+                <h2 th:text="${nombreClients}">0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-bg-success shadow">
+            <div class="card-body">
+                <h5>Commandes</h5>
+                <h2 th:text="${nombreCommandes}">0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-bg-secondary shadow">
+            <div class="card-body">
+                <h5>Utilisateurs</h5>
+                <h2 th:text="${nombreutilisateurs}">0</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card text-bg-info shadow">
+            <div class="card-body">
+                <h5>Articles</h5>
+                <h2 th:text="${nombreArticles}">0</h2>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div layout:fragment="content" class="container-fluid mt-4">
+
+    <!-- Liste des factures -->
+    <div class="card shadow">
+
+        <div class="card-header bg-secondary text-white">
+            <h4 class="mb-0">Liste des factures</h4>
+        </div>
+
+        <div class="card-body">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 class="mb-0">Factures</h5>
+
+                <a th:href="@{/factures/save}"
+                   class="btn btn-primary">
+                    + Nouvelle facture
+                </a>
+            </div>
+
+            <!-- Message de succès -->
+            <div th:if="${success != null}"
+                 class="alert alert-success alert-dismissible fade show"
+                 role="alert">
+
+                <span th:text="${success}"></span>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Fermer">
+                </button>
+            </div>
+
+            <!-- Message d'erreur -->
+            <div th:if="${error != null}"
+                 class="alert alert-danger alert-dismissible fade show"
+                 role="alert">
+
+                <span th:text="${error}"></span>
+
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="alert"
+                        aria-label="Fermer">
+                </button>
+            </div>
+
+            <div class="table-responsive">
+
+                <table class="table table-bordered table-hover align-middle">
+
+                    <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Numero Facture</th>
+                        <th>Date création</th>
+                        <th>Client</th>
+                        <th>Numero Commande</th>
+                        <th>Article</th>
+                        <th>Quantité</th>
+                        <th>Prix</th>
+                        <th>Montant total</th>
+                        <th>Statut paiement</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+
+                    <!-- Parcourir les factures -->
+                    <tr th:each="facture : ${factures}">
+
+                        <!-- ID -->
+                        <td th:text="${facture.id}">1</td>
+
+                        <!-- Numéro facture -->
+                        <td th:text="${facture.numeroFacture}">
+                            FAC-001
+                        </td>
+
+                        <!-- Date création -->
+                        <td>
+                            <span th:if="${facture.dateCreation != null}"
+                                  th:text="${#temporals.format(
+                                      facture.dateCreation,
+                                      'dd/MM/yyyy HH:mm')}">
+                            </span>
+
+                            <span th:unless="${facture.dateCreation != null}"
+                                  class="text-muted">
+                                Non définie
+                            </span>
+                        </td>
+
+                        <!-- Client -->
+                        <td>
+                            <span th:if="${facture.client != null}"
+                                  th:text="${facture.client.nom}">
+                            </span>
+
+                            <span th:unless="${facture.client != null}"
+                                  class="text-muted">
+                                Aucun client
+                            </span>
+                        </td>
+
+                        <!-- Commande -->
+                        <td>
+                            <span th:if="${facture.commande != null}"
+                                  th:text="${facture.commande.numero_cmd != null
+                                      ? facture.commande.numero_cmd
+                                      : facture.commande.id}">
+                            </span>
+
+                            <span th:unless="${facture.commande != null}"
+                                  class="text-muted">
+                                Aucune commande
+                            </span>
+                        </td>
+
+                        <!-- Article
+                             À conserver seulement si Facture possède
+                             une propriété article -->
+                        <td>
+                            <span th:if="${facture.article != null}"
+                                  th:text="${facture.article.nom}">
+                            </span>
+
+                            <span th:unless="${facture.article != null}"
+                                  class="text-muted">
+                                Aucun article
+                            </span>
+                        </td>
+
+                        <!-- Quantité -->
+                        <td class="text-center"
+                            th:text="${facture.quantite}">
+                            1
+                        </td>
+
+                        <!-- Prix -->
+                        <td class="text-end">
+                            <span th:text="${#numbers.formatDecimal(
+                                facture.prix, 1, 2)}">
+                                0.00
+                            </span>
+                            FCFA
+                        </td>
+
+                        <!-- Montant total -->
+                        <td class="text-end">
+                            <strong>
+                                <span th:text="${facture.montant_total != null
+                                    ? #numbers.formatDecimal(
+                                        facture.montant_total, 1, 2)
+                                    : '0.00'}">
+                                    0.00
+                                </span>
+                                FCFA
+                            </strong>
+                        </td>
+
+                        <!-- Statut paiement -->
+                        <td class="text-center">
+                            <span th:if="${facture.statutPaiement != null
+                                and !#strings.isEmpty(facture.statutPaiement)}"
+                                  th:text="${facture.statutPaiement}"
+                                  class="badge bg-info">
+                            </span>
+
+                            <span th:unless="${facture.statutPaiement != null
+                                and !#strings.isEmpty(facture.statutPaiement)}"
+                                  class="badge bg-secondary">
+                                Aucun statut
+                            </span>
+                        </td>
+
+                        <!-- Actions -->
+                        <td class="text-center text-nowrap">
+
+                            <a th:href="@{/factures/edit/{id}(id=${facture.id})}"
+                               class="btn btn-warning btn-sm mb-1">
+                                Modifier
+                            </a>
+
+                            <a th:href="@{/factures/delete/{id}(id=${facture.id})}"
+                               class="btn btn-danger btn-sm mb-1"
+                               onclick="return confirm('Voulez-vous supprimer cette facture ?');">
+                                Supprimer
+                            </a>
+
+                            <a th:href="@{/factures/{id}/pdf(id=${facture.id})}"
+                               class="btn btn-outline-danger btn-sm mb-1">
+                                PDF
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    <!-- Aucune facture -->
+                    <tr th:if="${#lists.isEmpty(factures.content)}">
+                        <td colspan="11"
+                            class="text-center text-muted py-4">
+                            Aucune facture disponible.
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            <nav th:if="${factures.totalPages > 1}"
+                 aria-label="Pagination des factures">
+
+                <ul class="pagination justify-content-center">
+
+                    <li class="page-item"
+                        th:classappend="${factures.first} ? 'disabled'">
+
+                        <a class="page-link"
+                           th:href="@{/factures/liste(
+                               page=${currentPage - 1}, size=3)}">
+                            Précédent
+                        </a>
+                    </li>
+
+                    <li class="page-item"
+                        th:each="p : ${#numbers.sequence(
+                            0, factures.totalPages - 1)}"
+                        th:classappend="${p == currentPage} ? 'active'">
+
+                        <a class="page-link"
+                           th:href="@{/factures/liste(page=${p}, size=3)}"
+                           th:text="${p + 1}">
+                        </a>
+                    </li>
+
+                    <li class="page-item"
+                        th:classappend="${factures.last} ? 'disabled'">
+
+                        <a class="page-link"
+                           th:href="@{/factures/liste(
+                               page=${currentPage + 1}, size=3)}">
+                            Suivant
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+</html>
